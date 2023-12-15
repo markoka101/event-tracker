@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Entity
-@Table(name="events")
+@Table(name="EVENTS")
 public class Events {
 
     @Id
@@ -38,7 +38,6 @@ public class Events {
     @Column
     private String location;
 
-    @NotBlank(message = "Event time cannot be blank")
     @NonNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
     @Column
@@ -50,12 +49,11 @@ public class Events {
 
     @NotBlank(message = "Event Contact cannot be blank")
     @NonNull
-    @Column
     private String contact;
 
     @JsonIgnore
-    @OneToMany
     @NonNull
+    @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 }

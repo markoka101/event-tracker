@@ -9,8 +9,10 @@ public interface EventsService {
     Events getEvent(String name);
     List<Events> getAllEvents();
 
+    Boolean creator(String username, Long id);
 
-    void editEvent(Long id, Events events);
+
+    void editEvent(Long id, Events editEvents);
 
     //deleting events
     void deleteEvent(Long id);

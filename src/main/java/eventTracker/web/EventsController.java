@@ -1,10 +1,15 @@
 package eventTracker.web;
 
+import eventTracker.entity.Events;
 import eventTracker.service.EventsService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.security.RolesAllowed;
+import javax.validation.Valid;
+import java.security.Principal;
 
 @AllArgsConstructor
 @RestController
@@ -23,6 +28,18 @@ public class EventsController {
     @GetMapping("/all")
     public ResponseEntity<?> displayAllEvents() {
         return new ResponseEntity<>(eventsService.getAllEvents(),HttpStatus.OK);
+    }
+
+    //edit event
+    @RolesAllowed({"ROLE_USER","ROLE_ADMIN"})
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<?> editEvent(@PathVariable Long id, @Valid @RequestBody Events editEvent, Principal p) {
+        //check if user is the creator of the event
+        if (!eventsService.creator(p.getName().toString(),id)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        eventsService.editEvent(id, editEvent);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

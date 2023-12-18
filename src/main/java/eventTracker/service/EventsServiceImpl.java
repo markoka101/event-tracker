@@ -54,7 +54,7 @@ public class EventsServiceImpl implements EventsService {
     //delete event
     @Override
     public void deleteEvent(Long id) {
-        entityManager.remove(unwrapEvent(eventsRepository.findById(id)));
+        entityManager.remove(getEvent(id));
     }
 
     //unwrap event

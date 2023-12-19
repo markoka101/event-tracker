@@ -7,6 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -56,4 +57,8 @@ public class Events {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy="savedEvents")
+    private Set<User> usersSaved;
 }

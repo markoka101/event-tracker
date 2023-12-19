@@ -16,8 +16,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Set;
 
 @AllArgsConstructor
 @RestController
@@ -64,13 +66,73 @@ public class UserController {
     /*
     User interactions with events
      */
+    //create event
     @RolesAllowed({"ROLE_USER","ROLE_ADMIN"})
     @PostMapping("/createEvent")
     public ResponseEntity<?> createEvent(@Valid @RequestBody Events event, Principal p) {
-        userService.createEvent(event,p.getName().toString());
+        userService.createEvent(event,p.getName());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    //create event
+    //save event
+    @RolesAllowed({"ROLE_USER","ROLE_ADMIN"})
+    @PostMapping("/save/{id}")
+    public ResponseEntity<?> saveEventToSet(@PathVariable Long id, Principal p) {
+        userService.saveEvent(id,p.getName());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
+    //remove saved event from user
+    @RolesAllowed({"ROLE_USER","ROLE_ADMIN"})
+    @DeleteMapping("removeSaved/{id}")
+    public ResponseEntity<?> removeSaved(@PathVariable Long id, Principal p) {
+        userService.removeSavedEvent(id,p.getName());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    //delete event
+    @Transactional
+    @RolesAllowed({"ROLE_USER","ROLE_ADMIN"})
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<?> deleteEvent(@PathVariable Long id,Principal p) {
+        //check if user is creator of event
+        if(!userService.eventCreator(id,p.getName()))  {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        userService.deleteEvent(id,p.getName());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    //edit event
+    @RolesAllowed({"ROLE_USER","ROLE_ADMIN"})
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<?> editEvent(@PathVariable Long id, @Valid @RequestBody Events editEvent, Principal p) {
+        //check if user is creator of event
+        if(!userService.eventCreator(id,p.getName()))  {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        userService.editEvent(id,editEvent,p.getName());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /*
+    Retrieve events for user
+     */
+    //user's saved events
+    @RolesAllowed({"ROLE_USER","ROLE_ADMIN"})
+    @GetMapping("/savedEvents")
+    @ResponseBody
+    public ResponseEntity<Set<Events>> savedEvents(Principal p) {
+        return new ResponseEntity<>(userService.getSavedEvents(p.getName()),HttpStatus.OK);
+    }
+
+    //get user's created events
+    @RolesAllowed({"ROLE_USER","ROLE_ADMIN"})
+    @GetMapping("/createdEvents")
+    @ResponseBody
+    public ResponseEntity<Set<Events>> createdEvents(Principal p) {
+        return new ResponseEntity<>(userService.getCreatedEvents(p.getName()),HttpStatus.OK);
+    }
 }

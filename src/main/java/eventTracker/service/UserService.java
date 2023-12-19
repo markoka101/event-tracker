@@ -13,9 +13,13 @@ public interface UserService {
 
     //user accessing events
     void createEvent(Events event, String username);
-    void saveEvent(Long eventId, Long userId);
-    void removeSavedEvent(Long eventId, Long userId);
-    Set<Events> getSavedEvents(Long id);
-    Set<Events> getCreatedEvents(Long id);
+    void editEvent(Long id, Events editEvents, String username);
+    void deleteEvent(Long id, String username);
+    void saveEvent(Long eventId, String username);
+    void removeSavedEvent(Long eventId, String username);
+    Set<Events> getSavedEvents(String username);
+    Set<Events> getCreatedEvents(String username);
+
+    Boolean eventCreator(Long id, String username);
 
 }

@@ -3,7 +3,6 @@ package eventTracker.service;
 import eventTracker.entity.Events;
 import eventTracker.entity.Role;
 import eventTracker.entity.User;
-import eventTracker.repository.EventsRepository;
 import eventTracker.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,7 +18,6 @@ public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private EventsService eventsService;
-    private EventsRepository eventsRepository;
 
     /*
     Getting user
@@ -57,37 +55,77 @@ public class UserServiceImpl implements UserService{
     /*
     User accessing events logic
      */
-
+    //create the event
     @Override
     public void createEvent(Events events, String username) {
-        User user = getUser(username, "username");
+        //set user for the event and save
+        User user = getUser(username,"username");
         events.setUser(user);
-        eventsRepository.save(events);
+        events = eventsService.saveEvent(events);
+
+        //add the saved event to the user's created events set
+        user.getCreatedEvents().add(events);
+        userRepository.save(user);
     }
+
+    //edit event
+    @Override
+    public void editEvent(Long id, Events editEvents, String username) {
+        //set edited event to the id of the event it will replace
+        editEvents.setId(id);
+        editEvents.setUser(getUser(username,"username"));
+        eventsService.saveEvent(editEvents);
+    }
+
+    //delete event
+    @Override
+    public void deleteEvent(Long id, String username) {
+        //remove event from created events
+        getUser(username,"username").getCreatedEvents().remove(eventsService.getEvent(id));
+        Events events = eventsService.getEvent(id);
+
+        //remove event from all users who saved event
+        for (User users : events.getUsersSaved()) {
+            users.getSavedEvents().remove(events);
+        }
+
+        //delete event
+        eventsService.deleteEvent(id);
+    }
+
     //add event to user's saved events
     @Override
-    public void saveEvent(Long eventId, Long userId) {
-        User user = unwrapUser(userRepository.findById(userId));
+    public void saveEvent(Long eventId, String username) {
+        User user = unwrapUser(userRepository.findByUsername(username));
         user.getSavedEvents().add(eventsService.getEvent(eventId));
+        userRepository.save(user);
     }
 
     //remove event from user's saved events
     @Override
-    public void removeSavedEvent(Long eventId, Long userId) {
-        User user = unwrapUser(userRepository.findById(userId));
+    public void removeSavedEvent(Long eventId, String username) {
+        User user = unwrapUser(userRepository.findByUsername(username));
         user.getSavedEvents().remove(eventsService.getEvent(eventId));
+        userRepository.save(user);
     }
 
     //get the user's saved events
     @Override
-    public Set<Events> getSavedEvents(Long id) {
-        return unwrapUser(userRepository.findById(id)).getSavedEvents();
+    public Set<Events> getSavedEvents(String username) {
+        return unwrapUser(userRepository.findByUsername(username)).getSavedEvents();
     }
 
     //get the user's created events
     @Override
-    public Set<Events> getCreatedEvents(Long id) {
-        return unwrapUser(userRepository.findById(id)).getCreatedEvents();
+    public Set<Events> getCreatedEvents(String username) {
+        return unwrapUser(userRepository.findByUsername(username)).getCreatedEvents();
+    }
+
+    //check if user is the creator of a specific event
+    @Override
+    public Boolean eventCreator(Long id, String username) {
+        User user = eventsService.getEvent(id).getUser();
+        return username.equals(user.getUsername());
     }
 
     //unwrap user

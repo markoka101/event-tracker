@@ -1,12 +1,12 @@
 package eventTracker.service;
 
 import eventTracker.entity.Events;
-import eventTracker.entity.User;
 import eventTracker.repository.EventsRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,18 +37,10 @@ public class EventsServiceImpl implements EventsService {
         return eventsRepository.findAll();
     }
 
-    //check if user is creator of event
+    //create event
     @Override
-    public Boolean creator(String username, Long id) {
-        User user = getEvent(id).getUser();
-        return username.equals(user.getUsername());
-    }
-
-    //edit event
-    @Override
-    public void editEvent(Long id, Events editEvents) {
-        editEvents.setId(id);
-        eventsRepository.save(editEvents);
+    public Events saveEvent(Events events) {
+        return eventsRepository.save(events);
     }
 
     //delete event

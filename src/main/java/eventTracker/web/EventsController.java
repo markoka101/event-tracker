@@ -26,34 +26,17 @@ public class EventsController {
     /*
     Get and display events
      */
+    //display all events
     @GetMapping("/all")
+    @ResponseBody
     public ResponseEntity<?> displayAllEvents() {
         return new ResponseEntity<>(eventsService.getAllEvents(),HttpStatus.OK);
     }
-
-    //edit event
+    //get event by name
     @RolesAllowed({"ROLE_USER","ROLE_ADMIN"})
-    @PutMapping("/{id}/edit")
-    public ResponseEntity<?> editEvent(@PathVariable Long id, @Valid @RequestBody Events editEvent, Principal p) {
-        //check if user is the creator of the event
-        if (!eventsService.creator(p.getName().toString(),id)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-        eventsService.editEvent(id, editEvent);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    //delete event
-    @Transactional
-    @RolesAllowed({"ROLE_USER", "ROLE_ADMIN"})
-    @DeleteMapping("/{id}/delete")
-    public ResponseEntity<?> deleteEvent(@PathVariable Long id, Principal p) {
-        //check if user is creator of event
-        if(!eventsService.creator(p.getName().toString(),id)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        eventsService.deleteEvent(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @GetMapping("/names")
+    @ResponseBody
+    public ResponseEntity<?> getEventByName(@RequestParam String name) {
+        return new ResponseEntity<>(eventsService.getEvent(name),HttpStatus.OK);
     }
 }

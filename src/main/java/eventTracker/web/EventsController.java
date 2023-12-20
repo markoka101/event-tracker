@@ -1,16 +1,12 @@
 package eventTracker.web;
 
-import eventTracker.entity.Events;
 import eventTracker.service.EventsService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.security.RolesAllowed;
-import javax.transaction.Transactional;
-import javax.validation.Valid;
-import java.security.Principal;
+
 
 @AllArgsConstructor
 @RestController

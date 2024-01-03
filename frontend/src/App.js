@@ -15,7 +15,7 @@ export default function App() {
     const[cookies,setCookie] = useCookies(['user']);
 
     return (
-        <main className='bg-slate-500 h-screen w-screen'>
+        <main className='bg-slate-500 h-90 w-screen'>
             <CookiesProvider>
                 {cookies.user ? (
                     <>
@@ -24,7 +24,7 @@ export default function App() {
                     </>
                 ) : (
                     <>
-                    {<DefaultNav />}
+                    <DefaultNav />
                     <BrowserRouter>
                         <Routes>
                             <Route path='/' element={<DefaultHome />} />

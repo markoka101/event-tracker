@@ -1,5 +1,6 @@
 import React from "react";
-export default  function Navbar({user}) {
+
+export default function Navbar({user}) {
     return (
         <header>
 

@@ -41,7 +41,7 @@ export default function Register(){
 
     return (
         <section id='register' className="relative items-center flex flex-col justify-center w-screen py-40 h-4/6">
-            <div className="container py-16 px-10 flex flex-col w-5/6 sm:w-96 md:w-96 lg:w-5/12 bg-gray-500 opacity-70 items-center justify-center">
+            <div className="container py-16 px-10 flex flex-col w-5/6 sm:w-96 md:w-96 lg:w-5/12 bg-gray-500 opacity-60 items-center justify-center">
 
             </div>
         </section>

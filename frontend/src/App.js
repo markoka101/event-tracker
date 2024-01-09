@@ -15,7 +15,7 @@ export default function App() {
     const[cookies,setCookie] = useCookies(['user']);
 
     return (
-        <main className='bg-slate-400 h-90 w-screen h-screen'>
+        <main className='bg-gradient-to-tr from-slate-400 to-slate-300 h-90 w-screen h-screen'>
             <CookiesProvider>
                 {cookies.user ? (
                     <>

@@ -14,6 +14,10 @@ export default function App() {
 
     const[cookies,setCookie] = useCookies(['user']);
 
+    function handleLogin(user) {
+        setCookie('user',user,{path:'/'},{expires:0})
+    }
+
     return (
         <main className='bg-gradient-to-tr from-slate-400 to-slate-300 h-90 w-screen h-screen'>
             <CookiesProvider>
@@ -27,7 +31,7 @@ export default function App() {
                         <DefaultNav />
                         <Routes>
                             <Route path='/' element={<DefaultHome />} />
-                            <Route path='/login' element={<Login />} />
+                            <Route path='/login' element={<Login onLogin={handleLogin}/>} />
                             <Route path='/register' element={<Register />} />
                         </Routes>
                     </BrowserRouter>

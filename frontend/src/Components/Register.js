@@ -79,10 +79,10 @@ export default function Register(){
                     onChange={e => setPassword(e.target.value)}/>
 
                     <div className="text-lg flex flex-row justify-between w-full pt-8">
-                        <button type="submit" value="Register" className="text-center w-1/2 mr-1 sm:mr-2 md:mr-2 lg:mr-4 border-2 border-black bg-gray-200 hover:border-white">
+                        <button type="submit" value="Register" className="text-center w-1/2 mr-1 sm:mr-2 md:mr-2 lg:mr-4 border-2 border-black bg-gray-200 hover:border-slate-400">
                             Register
                         </button>
-                        <button onClick={e => navigate('/')} className="text-center w-1/2 ml-1 sm:ml-2 md:ml-2 lg:ml-4 border-2 border-black bg-gray-200 hover:border-white">
+                        <button onClick={e => navigate('/')} className="text-center w-1/2 ml-1 sm:ml-2 md:ml-2 lg:ml-4 border-2 border-black bg-gray-200 hover:border-slate-400">
                             Back
                         </button>
                     </div>

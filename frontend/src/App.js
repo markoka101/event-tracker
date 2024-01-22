@@ -19,7 +19,7 @@ export default function App() {
     }
 
     return (
-        <main className='bg-gradient-to-tr from-slate-400 to-slate-300 w-screen h-screen overflow-hidden'>
+        <main className='bg-gradient-to-tr from-slate-300 to-slate-200 w-screen h-screen'>
             <CookiesProvider>
                 {cookies.user ? (
                     <>

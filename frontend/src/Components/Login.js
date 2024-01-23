@@ -34,6 +34,7 @@ export default function Login({onLogin}){
                     const username = data.username;
                     const token = data.accessToken;
                     onLogin({id,username,token});
+                    navigate('/');
                 })
             } else {
                 alert('username or password is incorrect');

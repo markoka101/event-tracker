@@ -9,23 +9,27 @@ import DefaultHome from './Components/DefaultHome';
 import Navbar from './Components/Navbar';
 import Register from './Components/Register';
 import DefaultNav from './Components/DefaultNav';
+import CreatePage from './Components/CreatePage';
 
 export default function App() {
 
     const[cookies,setCookie] = useCookies(['user']);
 
     function handleLogin(user) {
-        setCookie('user',user,{path:'/'},{expires:72000000})
+        setCookie('user',user,{path:'/'},{expires:1200})
     }
 
     return (
         <main className='bg-gradient-to-tr from-slate-300 to-slate-200 w-screen h-screen'>
             <CookiesProvider>
                 {cookies.user ? (
-                    <>
-                    <Navbar user = {cookies.user}/>
-                    <Home user  = {cookies.user}/>
-                    </>
+                    <BrowserRouter>
+                        <Navbar user = {cookies.user}/>
+                        <Routes>
+                            <Route path='/' element={<Home user = {cookies.user} />} />
+                            <Route path='/my-events' element={<CreatePage user = {cookies.user} />} />
+                        </Routes>
+                    </BrowserRouter>
                 ) : (
                     <BrowserRouter>
                         <DefaultNav />

@@ -1,5 +1,6 @@
-import moment from "moment";
 import React, { useEffect } from "react";
+import {convertDate,formatDate,dayAndTime}  from '../DateFunctions.js';
+
 
 export default function DefaultHome() {
 
@@ -42,42 +43,6 @@ export default function DefaultHome() {
         return arr;
     }
 
-    //convert date to be more readable
-    function convertDate(d) {
-        let dArr = d.split('');
-        dArr.splice(10,1,' ');
-        return dArr.join('');
-    }
-    const formatDate = fd  => {
-        return moment(convertDate(fd),'yyyy-MM-DD HH:mm').format('MM-DD-yyyy h:mm A').toString();
-    }
-    const dayAndTime = fd => {
-        const d = moment(convertDate(fd));
-        const day = d.isoWeekday();
-        const month = d.format('MMMM');
-        const time = d.format('h:mm A');
-        const year  = d.format('yyyy');
-        const dNum = d.format('DD');
-
-        //switch statement to create sentence for date   
-        switch(day) {
-            case 1:
-                return `Monday, ${month} ${dNum}, ${year} at ${time}`;
-            case 2:
-                return `Tuesday, ${month} ${dNum}, ${year} at ${time}`;
-            case 3:
-                return `Wednesday, ${month} ${dNum}, ${year} at ${time}`;
-            case 4:
-                return `Thursday, ${month} ${dNum}, ${year} at ${time}`;
-            case 5:
-                return `Friday, ${month} ${dNum}, ${year} at ${time}`;
-            case 6:
-                return `Saturday, ${month} ${dNum}, ${year} at ${time}`;
-            default:
-                return `Sunday, ${month} ${dNum}, ${year} at ${time}`;
-        }
-    }
-
 
     return (
         <section id='defaultHome' className="relative items-center flex flex-col justify-center w-screen max-h-[90vh] object-scale-down">
@@ -112,9 +77,7 @@ export default function DefaultHome() {
                                 <p className="font-semibold text-md">
                                     {events.location}
                                 </p>
-
-                                
-                                
+                               
                                 <h2 className="font-bold text-xl">
                                     Contact:
                                 </h2>

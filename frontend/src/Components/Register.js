@@ -29,8 +29,6 @@ export default function Register(){
             }
         }
 
-        console.log(userObj);
-
         fetch('http://localhost:8080/user/signup', ({
             method:'POST',
             mode:'cors',
@@ -50,7 +48,7 @@ export default function Register(){
     }
 
     return (
-        <section id='register' className="relative items-center flex flex-col justify-center w-screen py-40 h-4/6">
+        <section id='register' className="relative items-center flex flex-col justify-center w-screen py-40 h-5/6">
             <div className="container py-14 px-10 flex flex-col w-5/6 sm:w-96 md:w-96 lg:w-1/4 lg:min-w-96 bg-gradient-to-bl from-zinc-400 to-zinc-300 items-center justify-center border-black border-2">
                 <h1 className="text-center font-extrabold text-2xl">
                     Welcome

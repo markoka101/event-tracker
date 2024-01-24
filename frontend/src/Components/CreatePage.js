@@ -12,8 +12,8 @@ export default function CreatePage({user}) {
     const [savedEvents,setSavedEvents] = React.useState();
 
     //states for the forms to create and edit
-    const [createForm,setCreateForm] = React.useState(false);
-    const [editForm,setEditForm] = React.useState(false);
+    const [createOpen,setCreateOpen] = React.useState(false);
+    const [editOpen,setEditOpen] = React.useState(false);
 
     //states for events property when creating and editing
     const [editNumber,setEditNumber] = React.useState(0);
@@ -26,6 +26,42 @@ export default function CreatePage({user}) {
 
     //state if page is refreshed
     const [refresh,setRefresh] = React.useState(false);
+
+    //display events on page loading and changes
+    useEffect(() =>  {
+        const createFetch = async() => {
+            const createdEvents = await (
+                await fetch('http://localhost:8080/user/createdEvents', ({
+                    method:'GET',
+                    mode:'cors',
+                    headers: {
+                        'Content-Type':'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    }
+                }))
+            ).json();
+            setCreatedEvents(createdEvents);
+        };
+
+        const savedFetch = async() => {
+            const savedEvents = await (
+                await fetch('http://localhost:8080/user/savedEvents',({
+                    method:'GET',
+                    mode:'cors',
+                    headers: {
+                        'Content-Type':'application/json',
+                        'Authorization':`Bearer ${user.token}`
+                    }
+                }))
+            ).json();
+            setSavedEvents(savedEvents);
+        }
+
+        setRefresh(false);
+        createFetch();
+        savedFetch();
+        
+    },[refresh,user.token]);
 
     //event object
     const eventObj =  {
@@ -48,9 +84,18 @@ export default function CreatePage({user}) {
         e.preventDefault();
     }
 
+    //form that appears when user wants to edit event
+    function editForm() {
+
+    }
+    
+    //form that appears when user wants to create an event
+    function createForm()  {
+
+    }
     return(
         <section id="createPage">
-            <div className="container h-ll/12 flex flex-row  items-center overflow-auto scrollbar">
+            <div className="container h-ll/12 flex flex-row items-center overflow-auto scrollbar">
                 
             </div>
         </section>

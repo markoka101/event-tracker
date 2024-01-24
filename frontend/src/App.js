@@ -16,7 +16,7 @@ export default function App() {
     const[cookies,setCookie] = useCookies(['user']);
 
     function handleLogin(user) {
-        setCookie('user',user,{path:'/'},{expires:1200})
+        setCookie('user',user,{path:'/'},{expires:3600})
     }
 
     return (

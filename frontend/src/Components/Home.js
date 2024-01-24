@@ -1,43 +1,15 @@
 import moment from "moment";
 import React,{useEffect} from 'react';
+import { convertDate, formatDate, dayAndTime } from "../DateFunctions";
 
 export default function Home({user}) {
 
     //states for event data
     const [data,setData] = React.useState();
     const [saveData,setSaveData] = React.useState();
-    const [createdEvents,setCreatedEvents] = React.useState(); 
-
-    //setting states for form to create and edit events
-    const [eventForm,setEventForm] = React.useState(false);
-    const [editForm,setEditForm] = React.useState(false);
-
-    //states for events property when creating and editing
-    const [editNumber,setEditNumber] = React.useState(0);
-    const [eventName,setEventName]  = React.useState('');
-    const [desc,setDesc] = React.useState('');
-    const [date,setDate] = React.useState(moment().format('yyyy-MM-DDTHH:mm').toString());
-    const [location,setLocation] = React.useState('');
-    const [link,setLink] = React.useState('');
-    const [contact,setContact] =  React.useState('');
 
     //state for if page is refreshed
     const [refresh,setRefresh] = React.useState(false);
-
-    //event object
-    const eventObj =  {
-        name:eventName,
-        desc:desc,
-        date:date,
-        location:location,
-        contact:contact,
-        link:link,
-        completed:false
-    }
-
-    function createEvent(e) {
-        e.preventDefault();
-    }
 
     //display events on the page loading
     useEffect(() => {
@@ -54,9 +26,26 @@ export default function Home({user}) {
             setData(data);
         };
 
-        dataFetch();
+        const saveDateFetch = async() => {
+            const saveData = await (
+                await fetch('http://localhost:8080/user/savedEvents', ({
+                    method:'GET',
+                    mode:'cors',
+                    headers: {
+                        'Content-Type':'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    }
+                }))
+            ).json();
+            setSaveData(saveData);
+        };
+
         setRefresh(false);
-    },[refresh]);
+        saveDateFetch();
+        dataFetch();
+        
+        
+    },[refresh,user.token]);
 
     //make sure always working with array that isnt null/undefined
     const eventsArr = ()=> {
@@ -72,57 +61,170 @@ export default function Home({user}) {
         return arr;
     }
 
-    //convert date to be more readable
-    function convertDate(d) {
-        let dArr = d.split('');
-        dArr.splice(10,1,' ');
-        return dArr.join('');
-    }
-    const formatDate = fd  => {
-        return moment(convertDate(fd),'yyyy-MM-DD HH:mm').format('MM-DD-yyyy h:mm A').toString();
-    }
-    const dayAndTime = fd => {
-        const d = moment(convertDate(fd));
-        const day = d.isoWeekday();
-        const month = d.format('MMMM');
-        const time = d.format('h:mm A');
-        const year  = d.format('yyyy');
-        const dNum = d.format('DD');
+    //make sure working with a valid array
+    const savedEventsArr = () => {
+        const arr = [];
 
-        //switch statement to create sentence for date   
-        switch(day) {
-            case 1:
-                return `Monday, ${month} ${dNum}, ${year} at ${time}`;
-            case 2:
-                return `Tuesday, ${month} ${dNum}, ${year} at ${time}`;
-            case 3:
-                return `Wednesday, ${month} ${dNum}, ${year} at ${time}`;
-            case 4:
-                return `Thursday, ${month} ${dNum}, ${year} at ${time}`;
-            case 5:
-                return `Friday, ${month} ${dNum}, ${year} at ${time}`;
-            case 6:
-                return `Saturday, ${month} ${dNum}, ${year} at ${time}`;
-            default:
-                return `Sunday, ${month} ${dNum}, ${year} at ${time}`;
+        if(saveData) {
+            saveData.forEach(element => {
+                arr.push(element);
+            })
         }
+
+        return arr;
     }
 
-    //form to create event
-    function createEventForm() {
-        return(
-            <div className="w-full bg-zinc-400 rounded-xl border-2">
-                <form id="EventForm" onSubmit={createEvent}  className="flex flex-col">
-
-                </form>
-            </div>
-        );
+    //handle user saving event
+    function saveEvent(id) {
+        fetch(`http://localhost:8080/user/save/${id}`, ({
+            method:'POST',
+            mode:'cors',
+            headers: {
+                'Authorization': `Bearer ${user.token}`
+            }
+        }))
+        .then(res=> {
+            if(res.status === 200) {
+                setRefresh(true);
+            } else {
+                alert('Something went wrong');
+            }
+        })
+        .catch(err => console.log(err));
     }
+
+    //handle user removing saved event
+    function removeSave(id) {
+        fetch(`http://localhost:8080/user/removeSaved/${id}`, ({
+            method:'DELETE',
+            mode:'cors',
+            headers: {
+                'Authorization':`Bearer ${user.token}`
+            }
+        }))
+        .then(res => {
+            if(res.status === 200) {
+                setRefresh(true);
+            } else {
+                alert('Something went wrong');
+            }
+        })
+        .catch(err => console.log(err));
+    }
+
 
     return (
         <section id='home'>
-            <div className="container h-11/12 flex flex-row items-center overflow-auto scrollbar">
+            <div className="container w-[95%] h-5/6 mx-auto flex flex-row py-5 px-10 items-center justify-center">
+                <div className="bg-gray-300 py-6 w-3/5 border-gray-500 border-2 h-full">
+                    <h1 className="text-4xl font-bold px-4">
+                        ALL EVENTS:
+                    </h1>
+                    <div className=" my-2 py-2 px-3 w-full max-h-[75vh] overflow-auto scrollbar">
+                        {eventsArr().map(events => {
+                            return(
+                                <article key={events.id} className="bg-slate-50 border-black border-2 my-2 py-2 px-3 w-full">
 
+                                    <h1 className="pb-1 font-bold text-2xl">
+                                        {events.name}
+                                    </h1>
+                                    <h2 className="font-bold text-xl">
+                                        {dayAndTime(events.date)}
+                                    </h2>
+
+                                    <p className="font-semibold text-md">
+                                        ({convertDate(formatDate(events.date))})
+                                    </p>
+
+                                    <h2 className="font-bold text-xl">
+                                        Description:
+                                    </h2>
+                                    <p className="font-semibold text-md">
+                                        {events.description}
+                                    </p>
+
+                                    <h2 className="font-bold text-xl">
+                                        Location:
+                                    </h2>
+                                    <p className="font-semibold text-md">
+                                        {events.location}
+                                    </p>
+                                
+                                    <h2 className="font-bold text-xl">
+                                        Contact:
+                                    </h2>
+                                    <p className="font-semibold text-md">
+                                        {events.contact} <br></br>
+                                        {events.link}
+                                    </p>
+
+                                    <div className="min-w-full flex items-center justify-center my-3">
+                                        <button className="p-2 font-semibold bg-slate-100 ring-1 ring-gray-500 hover:ring-black hover:ring-2" 
+                                        onClick={e=>saveEvent(events.id)}>
+                                            SAVE EVENT
+                                        </button>
+                                    </div>
+                                </article>
+
+                            );
+                        })}
+                    </div>
+                </div>
+
+                <div className="bg-slate-300 py-6 ml-10 w-2/5 border-2 border-gray-600">
+                    <h1 className="text-4xl font-bold px-4">
+                        SAVED EVENTS:
+                    </h1>
+                    <div className=" my-2 py-2 px-3 w-full max-h-[75vh] overflow-auto scrollbar">
+                        {savedEventsArr().map(events => {
+                            return(
+                                <article key={events.id} className="bg-slate-50 border-black border-2 my-2 py-2 px-3 w-full">
+
+                                    <h1 className="pb-1 font-bold text-2xl">
+                                        {events.name}
+                                    </h1>
+                                    <h2 className="font-bold text-xl">
+                                        {dayAndTime(events.date)}
+                                    </h2>
+
+                                    <p className="font-semibold text-md">
+                                        ({convertDate(formatDate(events.date))})
+                                    </p>
+
+                                    <h2 className="font-bold text-xl">
+                                        Description:
+                                    </h2>
+                                    <p className="font-semibold text-md">
+                                        {events.description}
+                                    </p>
+
+                                    <h2 className="font-bold text-xl">
+                                        Location:
+                                    </h2>
+                                    <p className="font-semibold text-md">
+                                        {events.location}
+                                    </p>
+                                
+                                    <h2 className="font-bold text-xl">
+                                        Contact:
+                                    </h2>
+                                    <p className="font-semibold text-md">
+                                        {events.contact} <br></br>
+                                        {events.link}
+                                    </p>
+
+                                    <div className="min-w-full flex items-center justify-center my-3">
+                                        <button className="p-2 font-semibold bg-slate-100 ring-1 ring-gray-500 hover:ring-black hover:ring-2" 
+                                        onClick={e=>removeSave(events.id)}>
+                                            REMOVE EVENT
+                                        </button>
+                                    </div>
+                                </article>
+
+                            );
+                        })}
+                    </div>
+                </div>
             </div>
         </section>
     );

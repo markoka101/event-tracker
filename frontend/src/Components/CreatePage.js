@@ -113,6 +113,24 @@ export default function CreatePage({user}) {
         return arr;
     }
 
+    function removeSave(id) {
+        fetch(`http://localhost:8080/user/removeSaved/${id}`, ({
+            method:'DELETE',
+            mode:'cors',
+            headers: {
+                'Authorization':`Bearer ${user.token}`
+            }
+        }))
+        .then(res => {
+            if(res.status === 200) {
+                setRefresh(true);
+            } else {
+                alert('Something went wrong');
+            }
+        })
+        .catch(err => console.log(err));
+    }
+
     //handle submit for the edit form
     function editSubmit(e) {
         e.preventDefault();
@@ -193,13 +211,18 @@ export default function CreatePage({user}) {
 
     return(
         <section id="createPage">
-            <div className="container h-ll/12 flex flex-row items-center overflow-auto scrollbar">
-                <div className="flex flex-col">
-                    <button onClick={e=>clickCreate(e)}>
-                        Create
-                    </button>
+            <div className="container h-ll/12 flex flex-row w-[95%] h-5/6 mx-auto overflow-auto scrollbar py-5">
+                <div className="flex flex-col bg-gray-300 py-6 w-3/5 border-gray-500 border-2 h-full">
+                    <div className="flex justify-between">
+                        <h1 className="text-4xl font-bold px-4"> 
+                            CREATED EVENTS:
+                        </h1>
+                        <button onClick={e=>clickCreate(e)}>
+                            Create
+                        </button>
+                    </div>
                     {createOpen === true ? createForm() : null}
-                    <div className="my-2 py-2 px-3 w-full max-h-[75vh] overflow-auto scrollbar">
+                    <div className="my-2 py-2 px-3 w-full h-[75vh] overflow-auto scrollbar">
                         {createdArr(createdEvents).map(events => {
                             return  (
                                 <article key={events.id} className="bg-slate-50 border-black border-2 my-2 py-2  px-3  w-full">
@@ -238,6 +261,60 @@ export default function CreatePage({user}) {
 
                                 </article>
                             )
+                        })}
+                    </div>
+                </div>
+                <div className="bg-slate-300 py-6 ml-10 w-2/5 border-2 border-gray-600">
+                    <h1 className="text-4xl font-bold px-4">
+                        SAVED EVENTS:
+                    </h1>
+                    <div className=" my-2 py-2 px-3 w-full h-[75vh] overflow-auto scrollbar">
+                        {createdArr(savedEvents).map(events => {
+                            return(
+                                <article key={events.id} className="bg-slate-50 border-black border-2 my-2 py-2 px-3 w-full">
+
+                                    <h1 className="pb-1 font-bold text-2xl">
+                                        {events.name}
+                                    </h1>
+                                    <h2 className="font-bold text-xl">
+                                        {dayAndTime(events.date)}
+                                    </h2>
+
+                                    <p className="font-semibold text-md">
+                                        ({convertDate(formatDate(events.date))})
+                                    </p>
+
+                                    <h2 className="font-bold text-xl">
+                                        Description:
+                                    </h2>
+                                    <p className="font-semibold text-md">
+                                        {events.description}
+                                    </p>
+
+                                    <h2 className="font-bold text-xl">
+                                        Location:
+                                    </h2>
+                                    <p className="font-semibold text-md">
+                                        {events.location}
+                                    </p>
+                                
+                                    <h2 className="font-bold text-xl">
+                                        Contact:
+                                    </h2>
+                                    <p className="font-semibold text-md">
+                                        {events.contact} <br></br>
+                                        {events.link}
+                                    </p>
+
+                                    <div className="min-w-full flex items-center justify-center my-3">
+                                        <button className="p-2 font-semibold bg-slate-100 ring-1 ring-gray-500 hover:ring-black hover:ring-2" 
+                                        onClick={e=>removeSave(events.id)}>
+                                            REMOVE EVENT
+                                        </button>
+                                    </div>
+                                </article>
+
+                            );
                         })}
                     </div>
                 </div>

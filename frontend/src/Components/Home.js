@@ -115,7 +115,7 @@ export default function Home({user}) {
 
     return (
         <section id='home'>
-            <div className="container w-[95%] h-5/6 mx-auto flex flex-row py-5 px-10 items-center justify-center">
+            <div className="container w-[95%] h-5/6 mx-auto flex flex-row py-5 px-10 justify-center">
                 <div className="bg-gray-300 py-6 w-3/5 border-gray-500 border-2 h-full">
                     <h1 className="text-4xl font-bold px-4">
                         ALL EVENTS:

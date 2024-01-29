@@ -26,7 +26,7 @@ export default function App() {
                     <BrowserRouter>
                         <Navbar user = {cookies.user}/>
                         <Routes>
-                            <Route path='/' element={<Home user = {cookies.user} />} />
+                            <Route path='*' element={<Home user = {cookies.user} />} />
                             <Route path='/my-events' element={<CreatePage user = {cookies.user} />} />
                         </Routes>
                     </BrowserRouter>
@@ -34,7 +34,7 @@ export default function App() {
                     <BrowserRouter>
                         <DefaultNav />
                         <Routes>
-                            <Route path='/' element={<DefaultHome />} />
+                            <Route path='*' element={<DefaultHome />} />
                             <Route path='/login' element={<Login onLogin={handleLogin}/>} />
                             <Route path='/register' element={<Register />} />
                         </Routes>

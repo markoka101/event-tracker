@@ -22,7 +22,7 @@ export default function Navbar({user}) {
                 </div>
 
                 <button className="text-gray-200 hover:text-white font-bold text-xl mr-5"
-                onClick={w=> removeCookie('user')}>
+                onClick={e=> removeCookie('user')}>
                     Sign Out
                 </button>
             </div>

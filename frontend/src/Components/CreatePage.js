@@ -131,6 +131,25 @@ export default function CreatePage({user}) {
         .catch(err => console.log(err));
     }
 
+    //delete created event
+    function deleteEvent(id) {
+        fetch(`http://localhost:8080/user/delete/${id}`, ({
+            method:'DELETE',
+            mode:'cors',
+            headers: {
+                'Authorization':`Bearer ${user.token}`
+            }
+        }))
+        .then(res => {
+            if(res.status === 200) {
+                setRefresh(true);
+            } else{
+                alert('Something went wrong');
+            }
+        })
+        .catch(err => console.log(err));
+    }
+
     //handle submit for the edit form
     function editSubmit(e) {
         e.preventDefault();
@@ -156,7 +175,7 @@ export default function CreatePage({user}) {
     //form that appears when user wants to create an event
     function createForm()  {
         return (
-            <div className="">
+            <div className="flex items-center justify-center px-5">
             <form id='create-form' onSubmit={createSubmit} className="w-full lg:w-5/6 md:w-5/6 sm:w-5/6 h-3/4 flex flex-col text-lg font-bold mt-4">
                 <h1>
                     Event Name
@@ -212,12 +231,14 @@ export default function CreatePage({user}) {
     return(
         <section id="createPage">
             <div className="container h-ll/12 flex flex-row w-[95%] h-5/6 mx-auto overflow-auto scrollbar py-5">
-                <div className="flex flex-col bg-gray-300 py-6 w-3/5 border-gray-500 border-2 h-full">
+                <div className="flex flex-col bg-gray-300 py-6 w-3/5 border-gray-500 border-2 h-full max-h-[75vh] overflow-auto scrollbar">
                     <div className="flex justify-between">
                         <h1 className="text-4xl font-bold px-4"> 
                             CREATED EVENTS:
                         </h1>
-                        <button onClick={e=>clickCreate(e)}>
+                        <button 
+                        className="p-2 font-bold bg-slate-100 ring-1 ring-gray-500 hover:ring-black hover:ring-2 mr-8"
+                        onClick={e=>clickCreate(e)}>
                             Create
                         </button>
                     </div>
@@ -259,6 +280,12 @@ export default function CreatePage({user}) {
                                         {events.link}
                                     </p>
 
+                                    <div className="min-w-full flex items-center justify-center my-3">
+                                        <button className="p-2 font-semibold bg-slate-100 ring-1 ring-gray-500 hover:ring-black hover:ring-2" 
+                                        onClick={e=>deleteEvent(events.id)}>
+                                            DELETE EVENT
+                                        </button>
+                                    </div>
                                 </article>
                             )
                         })}
@@ -268,7 +295,7 @@ export default function CreatePage({user}) {
                     <h1 className="text-4xl font-bold px-4">
                         SAVED EVENTS:
                     </h1>
-                    <div className=" my-2 py-2 px-3 w-full h-[75vh] overflow-auto scrollbar">
+                    <div className=" my-2 py-2 px-3 w-full max-h-[75vh] overflow-auto scrollbar">
                         {createdArr(savedEvents).map(events => {
                             return(
                                 <article key={events.id} className="bg-slate-50 border-black border-2 my-2 py-2 px-3 w-full">

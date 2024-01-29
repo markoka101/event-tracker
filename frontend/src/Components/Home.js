@@ -120,7 +120,7 @@ export default function Home({user}) {
                     <h1 className="text-4xl font-bold px-4">
                         ALL EVENTS:
                     </h1>
-                    <div className=" my-2 py-2 px-3 w-full max-h-[75vh] overflow-auto scrollbar">
+                    <div className=" my-2 py-2 px-3 w-full h-[75vh] overflow-auto scrollbar">
                         {eventsArr().map(events => {
                             return(
                                 <article key={events.id} className="bg-slate-50 border-black border-2 my-2 py-2 px-3 w-full">

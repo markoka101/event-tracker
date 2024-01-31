@@ -20,7 +20,7 @@ export default function App() {
     }
 
     return (
-        <main className='bg-gradient-to-tr from-slate-300 to-slate-200 w-screen h-screen'>
+        <main className='bg-amber-800 bg-opacity-10 w-screen h-screen'>
             <CookiesProvider>
                 {cookies.user ? (
                     <BrowserRouter>

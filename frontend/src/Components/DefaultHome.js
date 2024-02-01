@@ -45,48 +45,58 @@ export default function DefaultHome() {
 
 
     return (
-        <section id='defaultHome' className="relative items-center flex flex-col justify-center w-screen max-h-[90vh] object-scale-down">
-            <div className="container w-[95%] h-5/6  mx-auto flex flex-col py-5 px-10 items-center overflow-auto scrollbar">
+        <section id='defaultHome'>
+            <div className="container w-[95%] h-5/6 mx-auto flex flex-col py-5 px-10 justify-center">
                 <h1 className="text-4xl font-bold w-11/12">All Events:</h1>
-                <div className="flex flex-col bg-gray-300 py-6 w-11/12 px-8 my-2 border-gray-500 border-2 rounded">
+                <div className="flex flex-col bg-stone-500 bg-opacity-30 py-6 w-11/12 px-8 my-2 border-amber-800 border-4 rounded-md h-[78vh] overflow-auto scrollbar">
                     {eventsArr().map(events => {
                         return(
-                            <div key={events.id} className="bg-slate-50 border-black border-2 my-2 py-2 px-3 w-full">
+                            <article key={events.id} className="bg-stone-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   
+                                    <div className="mx-[-12px] border-black border-b-2 pb-3 mb-3">
+                                        <h1 className="px-3 font-extrabold text-2xl">
+                                            {events.name}
+                                        </h1>
+                                    </div>
 
-                                <h1 className="pb-1 font-bold text-2xl">
-                                    {events.name}
-                                </h1>
-                                <h2 className="font-bold text-xl">
-                                    {dayAndTime(events.date)}
-                                </h2>
+                                    <div className="my-3">
+                                        <h2 className="font-extrabold text-xl">
+                                            {dayAndTime(events.date)}
+                                        </h2>
 
-                                <p className="font-semibold text-md">
-                                    ({convertDate(formatDate(events.date))})
-                                </p>
+                                        <p className="font-semibold text-md">
+                                            ({convertDate(formatDate(events.date))})
+                                        </p>
+                                    </div>
 
-                                <h2 className="font-bold text-xl">
-                                    Description:
-                                </h2>
-                                <p className="font-semibold text-md">
-                                    {events.description}
-                                </p>
+                                    <div className="my-3">
+                                        <h2 className="font-extrabold text-xl">
+                                            Description:
+                                        </h2>
+                                        <p className="font-semibold text-md">
+                                            {events.description}
+                                        </p>
+                                    </div>
 
-                                <h2 className="font-bold text-xl">
-                                    Location:
-                                </h2>
-                                <p className="font-semibold text-md">
-                                    {events.location}
-                                </p>
-                               
-                                <h2 className="font-bold text-xl">
-                                    Contact:
-                                </h2>
-                                <p className="font-semibold text-md">
-                                    {events.contact} <br></br>
-                                    {events.link}
-                                </p>
+                                    <div className="my-3">
+                                        <h2 className="font-extrabold text-xl">
+                                            Location:
+                                        </h2>
+                                        <p className="font-semibold text-md">
+                                            {events.location}
+                                        </p>
+                                    </div>
 
-                            </div>
+                                    <div className="my-3">
+                                        <h2 className="font-extrabold text-xl">
+                                            Contact:
+                                        </h2>
+                                        <p className="font-semibold text-md">
+                                            {events.contact} <br></br>
+                                            {events.link}
+                                        </p>
+                                    </div>
+
+                            </article>
 
                         );
                     })}

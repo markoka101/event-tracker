@@ -175,55 +175,65 @@ export default function CreatePage({user}) {
     //form that appears when user wants to create an event
     function createForm()  {
         return (
-            <div className="flex items-center justify-center px-5">
-            <form id='create-form' onSubmit={createSubmit} className="w-full lg:w-5/6 md:w-5/6 sm:w-5/6 h-3/4 flex flex-col text-lg font-bold mt-4">
-                <h1>
-                    Event Name
-                </h1>
-                <input type="text" placeholder="name" className="mb-2 pl-1"
-                value={eventName}
-                onChange={e => setEventName(e.target.value)}/>
+            <div className="flex items-center justify-center px-5 border-2 border-black rounded-md my-4 mx-4 bg-amber-50 bg-opacity-70">
+                <form id='create-form' onSubmit={createSubmit} className="w-full lg:w-5/6 md:w-5/6 sm:w-5/6 h-3/4 flex flex-col text-lg font-bold mt-4 py-2">
+                    <h1>
+                        Event Name
+                    </h1>
+                    <input type="text" placeholder="name" className="mb-2 pl-1"
+                    value={eventName}
+                    onChange={e => setEventName(e.target.value)}/>
 
-                <h1>
-                    Description
-                </h1>
-                <input type="text" placeholder="description" className="mb-2 pl-1"
-                value={desc}
-                onChange={e=>setDesc(e.target.value)}/>
+                    <h1>
+                        Description
+                    </h1>
+                    <textarea type="text" placeholder="description" className="mb-2 pl-1"
+                    value={desc}
+                    onChange={e=>setDesc(e.target.value)}/>
 
-                <h1>
-                    Location
-                </h1>
-                <input type="text" placeholder="20 W 34th St, New York, NY, 10001" className="mb-2 pl-1"
-                value={location}
-                onChange={e=>setLocation(e.target.value)}/>
+                    <h1>
+                        Location
+                    </h1>
+                    <textarea placeholder="20 W 34th St, New York, NY, 10001" className="mb-2 pl-1"
+                    value={location}
+                    onChange={e=>setLocation(e.target.value)}/>
 
-                <h1>
-                    Date
-                </h1>
-                <input type="datetime-local"
-                className=""
-                value={date}
-                onChange={e=>setDate(e.target.value)}/>
+                    <h1>
+                        Date
+                    </h1>
+                    <input type="datetime-local"
+                    className=""
+                    value={date}
+                    onChange={e=>setDate(e.target.value)}/>
 
-                <h1>
-                    Contact
-                </h1>
-                <input type="text" placeholder="Contact"className="mb-2 pl-1"
-                value={contact}
-                onChange={e=>setContact(e.target.value)}/>
+                    <h1>
+                        Contact
+                    </h1>
+                    <input type="text" placeholder="Contact"className="mb-2 pl-1"
+                    value={contact}
+                    onChange={e=>setContact(e.target.value)}/>
 
-                <h1>
-                    Link
-                </h1>
-                <input type="text" placeholder="link" className="mb-2 pl-1"
-                value={link}
-                onChange={e=>setLink(e.target.value)}/>
+                    <h1>
+                        Link
+                    </h1>
+                    <input type="text" placeholder="link" className="mb-2 pl-1"
+                    value={link}
+                    onChange={e=>setLink(e.target.value)}/>
 
-                <button type="submit" value='create'>
-                    Submit
-                </button>
-            </form>
+                    <div className="flex justify-between w-full my-2">
+                        <button 
+                        className="py-2 px-4 font-semibold bg-slate-100 ring-1 ring-gray-500 hover:ring-black hover:ring-2 w-1/4"
+                        type="submit" 
+                        value='create'>
+                            Submit
+                        </button>
+                        <button 
+                        className="py-2 px-4 font-semibold bg-slate-100 ring-1 ring-gray-500 hover:ring-black hover:ring-2 w-1/4"
+                        onClick={e => setCreateOpen(!createOpen)}>
+                            Close
+                        </button>
+                    </div>
+                </form>
             </div>
         );
     }
@@ -246,39 +256,50 @@ export default function CreatePage({user}) {
                     <div className="my-2 py-2 px-3 w-full h-[75vh] overflow-auto scrollbar">
                         {createdArr(createdEvents).map(events => {
                             return  (
-                                <article key={events.id} className="bg-slate-50 border-black border-2 my-2 py-2  px-3  w-full">
-                                    <h1 className="pb-1 font-bold text-2xl">
-                                        {events.name}
-                                    </h1>
-                                    <h2 className="font-bold text-xl">
-                                        {dayAndTime(events.date)}
-                                    </h2>
+                                <article key={events.id} className="bg-amber-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   
+                                    <div className="mx-[-12px] border-black border-b-2 pb-3 mb-3">
+                                        <h1 className="px-3 font-extrabold text-2xl">
+                                            {events.name}
+                                        </h1>
+                                    </div>
 
-                                    <p className="font-semibold text-md">
-                                        ({convertDate(formatDate(events.date))})
-                                    </p>
+                                    <div className="my-3">
+                                        <h2 className="font-extrabold text-xl">
+                                            {dayAndTime(events.date)}
+                                        </h2>
 
-                                    <h2 className="font-bold text-xl">
-                                        Description:
-                                    </h2>
-                                    <p className="font-semibold text-md">
-                                        {events.description}
-                                    </p>
+                                        <p className="font-semibold text-md">
+                                            ({convertDate(formatDate(events.date))})
+                                        </p>
+                                    </div>
 
-                                    <h2 className="font-bold text-xl">
-                                        Location:
-                                    </h2>
-                                    <p className="font-semibold text-md">
-                                        {events.location}
-                                    </p>
-                                
-                                    <h2 className="font-bold text-xl">
-                                        Contact:
-                                    </h2>
-                                    <p className="font-semibold text-md">
-                                        {events.contact} <br></br>
-                                        {events.link}
-                                    </p>
+                                    <div className="my-3">
+                                        <h2 className="font-extrabold text-xl">
+                                            Description:
+                                        </h2>
+                                        <p className="font-semibold text-md">
+                                            {events.description}
+                                        </p>
+                                    </div>
+
+                                    <div className="my-3">
+                                        <h2 className="font-extrabold text-xl">
+                                            Location:
+                                        </h2>
+                                        <p className="font-semibold text-md">
+                                            {events.location}
+                                        </p>
+                                    </div>
+
+                                    <div className="my-3">
+                                        <h2 className="font-extrabold text-xl">
+                                            Contact:
+                                        </h2>
+                                        <p className="font-semibold text-md">
+                                            {events.contact} <br></br>
+                                            {events.link}
+                                        </p>
+                                    </div>
 
                                     <div className="min-w-full flex items-center justify-center my-3">
                                         <button className="p-2 font-semibold bg-slate-100 ring-1 ring-gray-500 hover:ring-black hover:ring-2" 
@@ -298,40 +319,50 @@ export default function CreatePage({user}) {
                     <div className=" my-2 py-2 px-3 w-full max-h-[75vh] overflow-auto scrollbar">
                         {createdArr(savedEvents).map(events => {
                             return(
-                                <article key={events.id} className="bg-slate-50 border-black border-2 my-2 py-2 px-3 w-full">
+                                <article key={events.id} className="bg-amber-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   
+                                    <div className="mx-[-12px] border-black border-b-2 pb-3 mb-3">
+                                        <h1 className="px-3 font-extrabold text-2xl">
+                                            {events.name}
+                                        </h1>
+                                    </div>
 
-                                    <h1 className="pb-1 font-bold text-2xl">
-                                        {events.name}
-                                    </h1>
-                                    <h2 className="font-bold text-xl">
-                                        {dayAndTime(events.date)}
-                                    </h2>
+                                    <div className="my-3">
+                                        <h2 className="font-extrabold text-xl">
+                                            {dayAndTime(events.date)}
+                                        </h2>
 
-                                    <p className="font-semibold text-md">
-                                        ({convertDate(formatDate(events.date))})
-                                    </p>
+                                        <p className="font-semibold text-md">
+                                            ({convertDate(formatDate(events.date))})
+                                        </p>
+                                    </div>
 
-                                    <h2 className="font-bold text-xl">
-                                        Description:
-                                    </h2>
-                                    <p className="font-semibold text-md">
-                                        {events.description}
-                                    </p>
+                                    <div className="my-3">
+                                        <h2 className="font-extrabold text-xl">
+                                            Description:
+                                        </h2>
+                                        <p className="font-semibold text-md">
+                                            {events.description}
+                                        </p>
+                                    </div>
 
-                                    <h2 className="font-bold text-xl">
-                                        Location:
-                                    </h2>
-                                    <p className="font-semibold text-md">
-                                        {events.location}
-                                    </p>
-                                
-                                    <h2 className="font-bold text-xl">
-                                        Contact:
-                                    </h2>
-                                    <p className="font-semibold text-md">
-                                        {events.contact} <br></br>
-                                        {events.link}
-                                    </p>
+                                    <div className="my-3">
+                                        <h2 className="font-extrabold text-xl">
+                                            Location:
+                                        </h2>
+                                        <p className="font-semibold text-md">
+                                            {events.location}
+                                        </p>
+                                    </div>
+
+                                    <div className="my-3">
+                                        <h2 className="font-extrabold text-xl">
+                                            Contact:
+                                        </h2>
+                                        <p className="font-semibold text-md">
+                                            {events.contact} <br></br>
+                                            {events.link}
+                                        </p>
+                                    </div>
 
                                     <div className="min-w-full flex items-center justify-center my-3">
                                         <button className="p-2 font-semibold bg-slate-100 ring-1 ring-gray-500 hover:ring-black hover:ring-2" 

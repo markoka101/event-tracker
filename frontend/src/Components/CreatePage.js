@@ -27,6 +27,9 @@ export default function CreatePage({user}) {
     //state if page is refreshed
     const [refresh,setRefresh] = React.useState(false);
 
+    //state for the order to show events
+    const [order,setOrder] = React.useState(0);
+
     //display events on page loading and changes
     useEffect(() =>  {
         //created events
@@ -109,7 +112,18 @@ export default function CreatePage({user}) {
                 arr.push(element);
             })
         }
-
+  
+        switch(order) {
+            case 1: 
+                arr.sort((a,b) => a.name - b.name);
+                break;
+            case 2:
+                arr.sort((a,b) => moment(a.date,'yyyy-MM-DDTHH:mm').diff(moment(b.date, 'yyyy-MM-DDTHH:mm')));
+                break;
+            default:
+                break;
+        }
+        
         return arr;
     }
 
@@ -256,7 +270,7 @@ export default function CreatePage({user}) {
                     <div className="my-2 py-2 px-3 w-full h-[75vh] overflow-auto scrollbar">
                         {createdArr(createdEvents).map(events => {
                             return  (
-                                <article key={events.id} className="bg-amber-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   
+                                <article key={events.name} className="bg-amber-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   
                                     <div className="mx-[-12px] border-black border-b-2 pb-3 mb-3">
                                         <h1 className="px-3 font-extrabold text-2xl">
                                             {events.name}

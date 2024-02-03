@@ -14,4 +14,10 @@ public interface EventsService {
 
     //deleting events
     void deleteEvent(Long id);
+
+    /*
+    checks if current date is past event
+    If it is update status to complete
+    */
+    void updateAllEvents();
 }

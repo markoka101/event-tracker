@@ -6,8 +6,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @AllArgsConstructor
@@ -46,6 +49,20 @@ public class EventsServiceImpl implements EventsService {
     @Override
     public void deleteEvent(Long id) {
         entityManager.remove(getEvent(id));
+    }
+
+    //update completion status for expired events
+    @Override
+    public void updateAllEvents() {
+        List<Events> allEvents = getAllEvents();
+        Date currentDateTime = new Date();
+
+        for (Events events : allEvents) {
+            if (events.getDate().before(currentDateTime)) {
+                events.setCompleted(true);
+                eventsRepository.save(events);
+            }
+        }
     }
 
     //unwrap event

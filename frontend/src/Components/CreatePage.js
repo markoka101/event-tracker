@@ -96,6 +96,12 @@ export default function CreatePage({user}) {
             if (res.status === 201) {
                 setCreateOpen(false);
                 setRefresh(true);
+
+                //set hooks to original states
+                setEventName('');
+                setDesc('');
+                setDate(moment().format('yyyy-MM-DDTHH:mm').toString());
+                setLocation('');
             } else {
                 alert('Something went wrong');
             }
@@ -113,14 +119,20 @@ export default function CreatePage({user}) {
             })
         }
   
-        switch(order) {
+        console.log(order);
+        switch(Number(order)) {
             case 1: 
-                arr.sort((a,b) => a.name - b.name);
+                arr.sort((a,b) => {
+                    return String(a.name).toLowerCase().localeCompare(String(b.name).toLowerCase());
+                })
+                console.log(arr);
                 break;
             case 2:
                 arr.sort((a,b) => moment(a.date,'yyyy-MM-DDTHH:mm').diff(moment(b.date, 'yyyy-MM-DDTHH:mm')));
+                console.log(arr);
                 break;
             default:
+                console.log('default');
                 break;
         }
         
@@ -167,11 +179,97 @@ export default function CreatePage({user}) {
     //handle submit for the edit form
     function editSubmit(e) {
         e.preventDefault();
+        fetch(`http://localhost:8080/user/edit/${editNumber}`, ({
+            method:'PUT',
+            mode:'cors',
+            headers: {
+                'Content-Type':'application/json',
+                'Authorization':`Bearer ${user.token}`
+            },
+            body: JSON.stringify(eventObj)
+        }))
+        .then(res => {
+            if (res.status === 200) {
+                setEditOpen(false);
+                setRefresh(true);
+
+                //set hooks to original states
+                setEventName('');
+                setDesc('');
+                setDate(moment().format('yyyy-MM-DDTHH:mm').toString());
+                setLocation('');
+                
+            } else {
+                alert('Something went wrong');
+            }
+        })
+        .catch(err => console.log(err));
     }
 
     //form that appears when user wants to edit event
     function editForm() {
+        return (
+            <div className="flex items-center justify-center px-5 border-2 border-black rounded-md my-4 mx-4 bg-amber-50 bg-opacity-70">
+                <form id='edit-form' onSubmit={editSubmit} className="w-full lg:w-5/6 md:w-5/6 sm:w-5/6 h-3/4 flex flex-col text-lg font-bold mt-4 py-2">
+                    <h1>
+                        Event Name
+                    </h1>
+                    <input type="text" placeholder="name" className="mb-2 pl-1"
+                    value={eventName}
+                    onChange={e => setEventName(e.target.value)}/>
 
+                    <h1>
+                        Description
+                    </h1>
+                    <textarea type="text" placeholder="description" className="mb-2 pl-1"
+                    value={desc}
+                    onChange={e=>setDesc(e.target.value)}/>
+
+                    <h1>
+                        Location
+                    </h1>
+                    <textarea placeholder="20 W 34th St, New York, NY, 10001" className="mb-2 pl-1"
+                    value={location}
+                    onChange={e=>setLocation(e.target.value)}/>
+
+                    <h1>
+                        Date
+                    </h1>
+                    <input type="datetime-local"
+                    className=""
+                    value={date}
+                    onChange={e=>setDate(e.target.value)}/>
+
+                    <h1>
+                        Contact
+                    </h1>
+                    <input type="text" placeholder="Contact"className="mb-2 pl-1"
+                    value={contact}
+                    onChange={e=>setContact(e.target.value)}/>
+
+                    <h1>
+                        Link
+                    </h1>
+                    <input type="text" placeholder="link" className="mb-2 pl-1"
+                    value={link}
+                    onChange={e=>setLink(e.target.value)}/>
+
+                    <div className="flex justify-between w-full my-2">
+                        <button 
+                        className="py-2 px-4 font-semibold bg-slate-100 ring-1 ring-gray-500 hover:ring-black hover:ring-2 w-1/4"
+                        type="submit" 
+                        value='edit'>
+                            Submit
+                        </button>
+                        <button 
+                        className="py-2 px-4 font-semibold bg-slate-100 ring-1 ring-gray-500 hover:ring-black hover:ring-2 w-1/4"
+                        onClick={e => setEditOpen(!editOpen)}>
+                            Close
+                        </button>
+                    </div>
+                </form>
+            </div>
+        );
     }
 
     //change createOpen to true when user clicks to create new event
@@ -181,11 +279,24 @@ export default function CreatePage({user}) {
     }
 
     //change editOpen to true when user clicks to edit event
-    function clickEdit(editNum) {
-        setEditNumber(editNum);
+    function clickEdit(events) {
+        setEditNumber(events.id);
         setEditOpen(!editOpen);
+
+        //set hooks to events props
+        setEventName(events.name);
+        setDate(events.date);
+        setDesc(events.description);
+        setLocation(events.location);
+        setContact(events.contact);
+        setLink(events.link);
     }
     
+    function orderSelect(e) {
+        e.preventDefault();
+        setOrder(e.target.value);
+        setRefresh(true);
+    }
     //form that appears when user wants to create an event
     function createForm()  {
         return (
@@ -255,6 +366,15 @@ export default function CreatePage({user}) {
     return(
         <section id="createPage">
             <div className="container flex flex-row w-[95%] h-5/6 mx-auto overflow-auto scrollbar py-5">
+                <div>
+                    <select
+                    value={order}
+                    onChange={e=>orderSelect(e)}>
+                        <option hidden value={0}>Sort By</option>
+                        <option value={1}>name</option>
+                        <option value={2}>date</option>
+                    </select>
+                </div>
                 <div className="flex flex-col bg-stone-500 bg-opacity-30 py-6 w-3/5 border-amber-800 border-4 border-opacity-20 rounded-md h-full max-h-[85vh] overflow-auto scrollbar">
                     <div className="flex justify-between">
                         <h1 className="text-4xl font-bold px-4"> 
@@ -270,7 +390,7 @@ export default function CreatePage({user}) {
                     <div className="my-2 py-2 px-3 w-full h-[75vh] overflow-auto scrollbar">
                         {createdArr(createdEvents).map(events => {
                             return  (
-                                <article key={events.name} className="bg-amber-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   
+                                <article key={events.id} className="bg-amber-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   
                                     <div className="mx-[-12px] border-black border-b-2 pb-3 mb-3">
                                         <h1 className="px-3 font-extrabold text-2xl">
                                             {events.name}
@@ -315,12 +435,17 @@ export default function CreatePage({user}) {
                                         </p>
                                     </div>
 
-                                    <div className="min-w-full flex items-center justify-center my-3">
+                                    <div className="min-w-full flex items-center justify-between my-3">
                                         <button className="p-2 font-semibold bg-slate-100 ring-1 ring-gray-500 hover:ring-black hover:ring-2" 
                                         onClick={e=>deleteEvent(events.id)}>
                                             DELETE EVENT
                                         </button>
+                                        <button className="p-2 font-semibold bg-slate-100 ring-1 ring-gray-500 hover:ring-black hover:ring-2" 
+                                        onClick={e=>clickEdit(events)}>
+                                            EDIT EVENT
+                                        </button>
                                     </div>
+                                    {(editOpen === true && editNumber === events.id) ? editForm() : null}
                                 </article>
                             )
                         })}

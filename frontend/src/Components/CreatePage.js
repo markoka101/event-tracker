@@ -1,6 +1,7 @@
 import React, {useEffect} from "react";
 import moment from "moment";
 import  {convertDate, formatDate,dayAndTime} from '../DateFunctions';
+import { eventsArr } from "../Order";
 
 export default function CreatePage({user}) {
 
@@ -28,7 +29,8 @@ export default function CreatePage({user}) {
     const [refresh,setRefresh] = React.useState(false);
 
     //state for the order to show events
-    const [order,setOrder] = React.useState(0);
+    const [createdOrder,setCreatedOrder] = React.useState(0);
+    const  [savedOrder,setSavedOrder] = React.useState(0);
 
     //display events on page loading and changes
     useEffect(() =>  {
@@ -107,36 +109,6 @@ export default function CreatePage({user}) {
             }
         })
         .catch(err => console.log(err));
-    }
-
-    //
-    const createdArr = (data) => {
-        const arr = [];
-
-        if(data) {
-            data.forEach(element => {
-                arr.push(element);
-            })
-        }
-  
-        console.log(order);
-        switch(Number(order)) {
-            case 1: 
-                arr.sort((a,b) => {
-                    return String(a.name).toLowerCase().localeCompare(String(b.name).toLowerCase());
-                })
-                console.log(arr);
-                break;
-            case 2:
-                arr.sort((a,b) => moment(a.date,'yyyy-MM-DDTHH:mm').diff(moment(b.date, 'yyyy-MM-DDTHH:mm')));
-                console.log(arr);
-                break;
-            default:
-                console.log('default');
-                break;
-        }
-        
-        return arr;
     }
 
     function removeSave(id) {
@@ -292,11 +264,20 @@ export default function CreatePage({user}) {
         setLink(events.link);
     }
     
-    function orderSelect(e) {
+    /*
+    Select order to show the events
+    */
+    function createOrderSelect(e) {
         e.preventDefault();
-        setOrder(e.target.value);
+        setCreatedOrder(e.target.value);
         setRefresh(true);
     }
+    function saveOrderSelect(e)  {
+        e.preventDefault();
+        setSavedOrder(e.target.value);
+        setRefresh(true);
+    }
+
     //form that appears when user wants to create an event
     function createForm()  {
         return (
@@ -366,15 +347,6 @@ export default function CreatePage({user}) {
     return(
         <section id="createPage">
             <div className="container flex flex-row w-[95%] h-5/6 mx-auto overflow-auto scrollbar py-5">
-                <div>
-                    <select
-                    value={order}
-                    onChange={e=>orderSelect(e)}>
-                        <option hidden value={0}>Sort By</option>
-                        <option value={1}>name</option>
-                        <option value={2}>date</option>
-                    </select>
-                </div>
                 <div className="flex flex-col bg-stone-500 bg-opacity-30 py-6 w-3/5 border-amber-800 border-4 border-opacity-20 rounded-md h-full max-h-[85vh] overflow-auto scrollbar">
                     <div className="flex justify-between">
                         <h1 className="text-4xl font-bold px-4"> 
@@ -387,8 +359,22 @@ export default function CreatePage({user}) {
                         </button>
                     </div>
                     {createOpen === true ? createForm() : null}
-                    <div className="my-2 py-2 px-3 w-full h-[75vh] overflow-auto scrollbar">
-                        {createdArr(createdEvents).map(events => {
+                    <div>
+
+                    <div className="items-center justify-start flex ml-3 mt-1 mb-2">
+                        <select
+                        className="px-1 ring-1 ring-black"
+                        value={createdOrder}
+                        onChange={e=>createOrderSelect(e)}>
+                            <option hidden value={0}>Sort By</option>
+                            <option value={1}>name</option>
+                            <option value={2}>date</option>
+                        </select>
+                    </div>
+
+                </div>
+                    <div className="px-3 w-full h-full overflow-auto scrollbar">
+                        {eventsArr(createdEvents,createdOrder).map(events => {
                             return  (
                                 <article key={events.id} className="bg-amber-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   
                                     <div className="mx-[-12px] border-black border-b-2 pb-3 mb-3">
@@ -455,8 +441,19 @@ export default function CreatePage({user}) {
                     <h1 className="text-4xl font-bold px-4">
                         SAVED EVENTS:
                     </h1>
-                    <div className=" my-2 py-2 px-3 w-full max-h-[75vh] overflow-auto scrollbar">
-                        {createdArr(savedEvents).map(events => {
+                    <div className="mt-1 mb-2 ml-3 items-center justify-start flex">
+                        <select
+                        className="px-1 ring-1 ring-black"
+                        value={savedOrder}
+                        onChange={e=>saveOrderSelect(e)}>
+                            <option hidden value={0}>Sort By</option>
+                            <option value={1}>name</option>
+                            <option value={2}>date</option>
+                        </select>
+
+                    </div>
+                    <div className="px-3 w-full max-h-[70vh] overflow-auto scrollbar">
+                        {eventsArr(savedEvents,savedOrder).map(events => {
                             return(
                                 <article key={events.id} className="bg-amber-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   
                                     <div className="mx-[-12px] border-black border-b-2 pb-3 mb-3">

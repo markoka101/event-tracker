@@ -1,6 +1,7 @@
 import moment from "moment";
 import React,{useEffect} from 'react';
 import { convertDate, formatDate, dayAndTime } from "../DateFunctions";
+import { eventsArr } from "../Order";
 
 export default function Home({user}) {
 
@@ -10,6 +11,10 @@ export default function Home({user}) {
 
     //state for if page is refreshed
     const [refresh,setRefresh] = React.useState(false);
+
+    //state for order to show events
+    const [allOrder,setAllOrder] = React.useState(0);
+    const [savedOrder,setSavedOrder] = React.useState(0);
 
     //display events on the page loading
     useEffect(() => {
@@ -46,33 +51,6 @@ export default function Home({user}) {
         
         
     },[refresh,user.token]);
-
-    //make sure always working with array that isnt null/undefined
-    const eventsArr = ()=> {
-        //initialize empty array
-        const arr = [];
-
-        if(data) {
-            data.forEach(element => {
-                arr.push(element);
-            });
-        }
-
-        return arr;
-    }
-
-    //make sure working with a valid array
-    const savedEventsArr = () => {
-        const arr = [];
-
-        if(saveData) {
-            saveData.forEach(element => {
-                arr.push(element);
-            })
-        }
-
-        return arr;
-    }
 
     //handle user saving event
     function saveEvent(id) {
@@ -112,6 +90,16 @@ export default function Home({user}) {
         .catch(err => console.log(err));
     }
 
+    function allOrderSelect(e) {
+        e.preventDefault();
+        setAllOrder(e.target.value);
+        setRefresh(true);
+    }
+    function saveOrderSelect(e) {
+        e.preventDefault();
+        setSavedOrder(e.target.value);
+        setRefresh(true);
+    }
 
     return (
         <section id='home'>
@@ -120,8 +108,19 @@ export default function Home({user}) {
                     <h1 className="text-4xl font-extrabold px-4">
                         ALL EVENTS:
                     </h1>
-                    <div className=" my-2 py-2 px-3 w-full h-[75vh] overflow-auto scrollbar">
-                        {eventsArr().map(events => {
+
+                    <div className="items-center justify-start flex ml-3 mt-1 mb-2">
+                        <select
+                        className="px-1 ring-1 ring-black"
+                        value={allOrder}
+                        onChange={e=>allOrderSelect(e)}>
+                            <option hidden value={0}>Sort By</option>
+                            <option value={1}>name</option>
+                            <option value={2}>date</option>
+                        </select>
+                    </div>
+                    <div className="px-3 w-full h-[72vh] overflow-auto scrollbar">
+                        {eventsArr(data,allOrder).map(events => {
                             return(
                                 <article key={events.id} className="bg-amber-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   
                                     <div className="mx-[-12px] border-black border-b-2 pb-3 mb-3">
@@ -185,8 +184,19 @@ export default function Home({user}) {
                     <h1 className="text-4xl font-bold px-4">
                         SAVED EVENTS:
                     </h1>
-                    <div className=" my-2 py-2 px-3 w-full max-h-[75vh] overflow-auto scrollbar">
-                        {savedEventsArr().map(events => {
+
+                    <div className="items-center justify-start flex ml-3 mt-1 mb-2">
+                        <select
+                        className="px-1 ring-1 ring-black"
+                        value={savedOrder}
+                        onChange={e=>saveOrderSelect(e)}>
+                            <option hidden value={0}>Sort By</option>
+                            <option value={1}>name</option>
+                            <option value={2}>date</option>
+                        </select>
+                    </div>
+                    <div className="px-3 w-full h-[72vh] overflow-auto scrollbar">
+                        {eventsArr(saveData,savedOrder).map(events => {
                             return(
                                 <article key={events.id} className="bg-amber-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   
                                     <div className="mx-[-12px] border-black border-b-2 pb-3 mb-3">

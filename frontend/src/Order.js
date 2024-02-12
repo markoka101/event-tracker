@@ -1,11 +1,17 @@
 import moment from "moment";
 
-export function eventsArr (data,order) {
+export function eventsArr (data,order,created) {
     const arr = [];
 
     if(data) {
         data.forEach(element => {
-            arr.push(element);
+            //dont push completed events to array unless it is for create page
+            if(!element.completed){
+                arr.push(element);
+            }
+            if(element.completed && created)  {
+                arr.push(element);
+            }
         })
     }
 

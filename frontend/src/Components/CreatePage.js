@@ -248,6 +248,14 @@ export default function CreatePage({user}) {
     function clickCreate(e) {
         e.preventDefault();
         setCreateOpen(!createOpen);
+
+        //set hooks to events props
+        setEventName('');
+        setDate(moment().format('yyyy-MM-DDTHH:mm').toString());
+        setDesc('');
+        setLocation('');
+        setContact('');
+        setLink('');
     }
 
     //change editOpen to true when user clicks to edit event
@@ -281,8 +289,8 @@ export default function CreatePage({user}) {
     //form that appears when user wants to create an event
     function createForm()  {
         return (
-            <div className="flex items-center justify-center px-5 border-2 border-black rounded-md my-4 mx-4 bg-amber-50 bg-opacity-70">
-                <form id='create-form' onSubmit={createSubmit} className="w-full lg:w-5/6 md:w-5/6 sm:w-5/6 h-3/4 flex flex-col text-lg font-bold mt-4 py-2">
+            <div className="flex items-center justify-center px-5 border-2 border-black rounded-md my-2 mx-4 bg-amber-50 bg-opacity-70">
+                <form id='create-form' onSubmit={createSubmit} className="w-full lg:w-5/6 md:w-5/6 sm:w-5/6 h-full flex flex-col text-lg font-bold mt-4 py-2">
                     <h1>
                         Event Name
                     </h1>
@@ -347,7 +355,7 @@ export default function CreatePage({user}) {
     return(
         <section id="createPage">
             <div className="container flex flex-row w-[95%] h-5/6 mx-auto overflow-auto scrollbar py-5">
-                <div className="flex flex-col bg-stone-500 bg-opacity-30 py-6 w-3/5 border-amber-800 border-4 border-opacity-20 rounded-md h-full max-h-[85vh] overflow-auto scrollbar">
+                <div className="flex flex-col bg-stone-500 bg-opacity-30 py-6 w-3/5 border-amber-800 border-4 border-opacity-20 rounded-md h-[87vh] overflow-auto scrollbar">
                     <div className="flex justify-between">
                         <h1 className="text-4xl font-bold px-4"> 
                             CREATED EVENTS:
@@ -374,7 +382,7 @@ export default function CreatePage({user}) {
 
                 </div>
                     <div className="px-3 w-full h-full overflow-auto scrollbar">
-                        {eventsArr(createdEvents,createdOrder).map(events => {
+                        {eventsArr(createdEvents,createdOrder,true).map(events => {
                             return  (
                                 <article key={events.id} className="bg-amber-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   
                                     <div className="mx-[-12px] border-black border-b-2 pb-3 mb-3">
@@ -453,7 +461,7 @@ export default function CreatePage({user}) {
 
                     </div>
                     <div className="px-3 w-full max-h-[70vh] overflow-auto scrollbar">
-                        {eventsArr(savedEvents,savedOrder).map(events => {
+                        {eventsArr(savedEvents,savedOrder,false).map(events => {
                             return(
                                 <article key={events.id} className="bg-amber-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   
                                     <div className="mx-[-12px] border-black border-b-2 pb-3 mb-3">

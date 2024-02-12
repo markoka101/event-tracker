@@ -46,7 +46,7 @@ export default function DefaultHome() {
 
     return (
         <section id='defaultHome'>
-            <div className="container w-[95%] h-5/6 mx-auto flex flex-col py-5 px-10 justify-center">
+            <div className="container w-[95%] h-5/6 mx-auto flex flex-col py-5 px-10 justify-center items-center">
                 <h1 className="text-4xl font-bold w-11/12">All Events:</h1>
                 <div className="flex flex-col bg-stone-500 bg-opacity-30 py-6 w-11/12 px-8 my-2 border-amber-800 border-4 rounded-md h-[78vh] overflow-auto scrollbar">
                     {eventsArr().map(events => {

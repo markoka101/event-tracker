@@ -120,7 +120,7 @@ export default function Home({user}) {
                         </select>
                     </div>
                     <div className="px-3 w-full h-[72vh] overflow-auto scrollbar">
-                        {eventsArr(data,allOrder).map(events => {
+                        {eventsArr(data,allOrder,false).map(events => {
                             return(
                                 <article key={events.id} className="bg-amber-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   
                                     <div className="mx-[-12px] border-black border-b-2 pb-3 mb-3">
@@ -196,7 +196,7 @@ export default function Home({user}) {
                         </select>
                     </div>
                     <div className="px-3 w-full h-[72vh] overflow-auto scrollbar">
-                        {eventsArr(saveData,savedOrder).map(events => {
+                        {eventsArr(saveData,savedOrder,false).map(events => {
                             return(
                                 <article key={events.id} className="bg-amber-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   
                                     <div className="mx-[-12px] border-black border-b-2 pb-3 mb-3">

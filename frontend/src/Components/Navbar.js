@@ -8,7 +8,7 @@ export default function Navbar({user}) {
     const [cookies,setCookie,removeCookie] = useCookies();
 
     return (
-        <header className="bg-gray-600 bg-opacity-85 top-0 z-10 flex justify-center w-full">
+        <header className="bg-gray-600 bg-opacity-85 top-0 z-[10vh] flex justify-center w-full">
             <div className="container mx-10 flex flex-row py-3 justify-between min-w-full">
                 <div className="flex flex-row px-5">
                     <button className="text-gray-200 hover:text-white font-bold text-xl mr-8"

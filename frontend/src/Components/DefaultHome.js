@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import {convertDate,formatDate,dayAndTime}  from '../DateFunctions.js';
+import { eventsArr } from "../Order.js";
 
 
 export default function DefaultHome() {
@@ -29,27 +30,13 @@ export default function DefaultHome() {
         setRefresh(false);
     },[refresh]);
 
-    //make sure always working with array that isnt null/undefined
-    const eventsArr = ()=> {
-        //initialize empty array
-        const arr = [];
-
-        if(data) {
-            data.forEach(element => {
-                arr.push(element);
-            });
-        }
-
-        return arr;
-    }
-
 
     return (
         <section id='defaultHome'>
             <div className="container w-[95%] h-5/6 mx-auto flex flex-col py-5 px-10 justify-center items-center">
                 <h1 className="text-4xl font-bold w-11/12">All Events:</h1>
-                <div className="flex flex-col bg-stone-500 bg-opacity-30 py-6 w-11/12 px-8 my-2 border-amber-800 border-4 rounded-md h-[78vh] overflow-auto scrollbar">
-                    {eventsArr().map(events => {
+                <div className="flex flex-col bg-stone-500 bg-opacity-30 py-6 w-11/12 px-8 my-2 border-amber-800 border-4 rounded-md h-[82vh] overflow-auto scrollbar">
+                    {eventsArr(data,2,false).map(events => {
                         return(
                             <article key={events.id} className="bg-stone-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   
                                     <div className="mx-[-12px] border-black border-b-2 pb-3 mb-3">

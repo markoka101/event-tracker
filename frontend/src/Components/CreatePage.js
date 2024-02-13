@@ -2,6 +2,9 @@ import React, {useEffect} from "react";
 import moment from "moment";
 import  {convertDate, formatDate,dayAndTime} from '../DateFunctions';
 import { eventsArr } from "../Order";
+import { environment } from "../MapBoxEnv";
+import mapboxgl from "mapbox-gl";
+import { AddressAutofill } from "@mapbox/search-js-react";
 
 export default function CreatePage({user}) {
 
@@ -24,6 +27,14 @@ export default function CreatePage({user}) {
     const [location,setLocation] = React.useState('');
     const [link,setLink] = React.useState('');
     const [contact,setContact] =  React.useState('');
+
+    //states for location form
+    const [address1, setAddress1] = React.useState('');
+    const [address2, setAddress2] = React.useState('');
+    const [city, setCity] = React.useState('');
+    const [addState,setAddState]  = React.useState('');
+    const [country,setCountry] = React.useState('');
+    const [postal,setPostal] = React.useState('');
 
     //state if page is refreshed
     const [refresh,setRefresh] = React.useState(false);
@@ -78,13 +89,30 @@ export default function CreatePage({user}) {
         date:date,
         completed:false,
         contact:contact
-        
+    }
 
+    //address object
+    const address = {
+        address1:address1,
+        address2:address2,
+        city:city,
+        state:addState,
+        country:country,
+        postal:postal
     }
 
     //handle submit from form to create event
     function createSubmit(e) {
         e.preventDefault();
+
+        let loc = ''
+        for (let element in address) {
+            if (!(address[element] === '')) {
+                loc += `${String(address[element])} `
+            }
+        }
+        setLocation(loc);
+
         fetch('http://localhost:8080/user/createEvent', ({
             method:'POST',
             mode:'cors',
@@ -199,7 +227,7 @@ export default function CreatePage({user}) {
 
                     <h1>
                         Location
-                    </h1>
+                    </h1> 
                     <textarea placeholder="20 W 34th St, New York, NY, 10001" className="mb-2 pl-1"
                     value={location}
                     onChange={e=>setLocation(e.target.value)}/>
@@ -308,10 +336,40 @@ export default function CreatePage({user}) {
                     <h1>
                         Location
                     </h1>
-                    <textarea placeholder="20 W 34th St, New York, NY, 10001" className="mb-2 pl-1"
-                    value={location}
-                    onChange={e=>setLocation(e.target.value)}/>
+                    <div className="flex flex-col">
+                        <AddressAutofill 
+                        accessToken={String(environment.mapbox.accessToken)}>
+                            <input type='text' placeholder="address line 1" className="mb-2 pl-1"
+                            value={address1}
+                            onChange={e=>setAddress1(e.target.value)}/>
+                            
+                        </AddressAutofill>
+                        <input type='text' placeholder="address line 2" className="mb-2 pl-1"
+                        value={address2}
+                        autoComplete="address-line2"
+                        onChange={e=>setAddress2(e.target.value)}/>
 
+                        <input type='text' placeholder="city" className="mb-2 pl-1"
+                        value={city}
+                        autoComplete="address-level2"
+                        onChange={e=>setCity(e.target.value)}/>
+
+                        <input type='text' placeholder="state" className="mb-2 pl-1"
+                        value={addState}
+                        autoComplete="address-level1"
+                        onChange={e=>setAddState(e.target.value)}/>
+
+                        <input type='text' placeholder="country" className="mb-2 pl-1"
+                        value={country}
+                        autoComplete="country"
+                        onChange={e=>setCountry(e.target.value)}/>
+
+                        <input type='text' placeholder="post code" className="mb-2 pl-1"
+                        value={postal}
+                        autoComplete="postal-code"
+                        onChange={e=>setPostal(e.target.value)}/>
+                        
+                    </div>
                     <h1>
                         Date
                     </h1>

@@ -2,6 +2,7 @@ package eventTracker.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import eventTracker.pojo.Address;
 import lombok.*;
 
 import javax.persistence.*;
@@ -34,10 +35,9 @@ public class Events {
     @Column
     private String link;
 
-    @NotBlank(message = "Event location cannot be blank")
     @NonNull
     @Column
-    private String location;
+    private Address address;
 
     @NonNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")

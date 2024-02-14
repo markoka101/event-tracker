@@ -69,7 +69,9 @@ export default function DefaultHome() {
                                             Location:
                                         </h2>
                                         <p className="font-semibold text-md">
-                                            {events.location}
+                                            {events.address.addressLine1}, {events.address.addressLine2} <br></br>
+                                            {events.address.city}, {events.address.state} <br></br>
+                                            {events.address.country} {events.address.postalCode}
                                         </p>
                                     </div>
 

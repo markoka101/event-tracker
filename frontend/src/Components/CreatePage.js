@@ -80,38 +80,33 @@ export default function CreatePage({user}) {
         
     },[refresh,user.token]);
 
+
+    //address object
+    const address = {
+        addressLine1:address1,
+        addressLine2:address2,
+        city:city,
+        state:addState,
+        country:country,
+        postalCode:postal
+    }
+
     //event object
     const eventObj =  {
         name:eventName,
         description:desc,
         link:link,
-        location:location,
+        address:address,
         date:date,
         completed:false,
         contact:contact
     }
 
-    //address object
-    const address = {
-        address1:address1,
-        address2:address2,
-        city:city,
-        state:addState,
-        country:country,
-        postal:postal
-    }
+    
 
     //handle submit from form to create event
     function createSubmit(e) {
         e.preventDefault();
-
-        let loc = ''
-        for (let element in address) {
-            if (!(address[element] === '')) {
-                loc += `${String(address[element])} `
-            }
-        }
-        setLocation(loc);
 
         fetch('http://localhost:8080/user/createEvent', ({
             method:'POST',
@@ -132,6 +127,15 @@ export default function CreatePage({user}) {
                 setDesc('');
                 setDate(moment().format('yyyy-MM-DDTHH:mm').toString());
                 setLocation('');
+
+                //set address hooks back to original state
+                setAddress1('');
+                setAddress2('');
+                setCity('');
+                setAddState('');
+                setCountry('');
+                setPostal('');
+
             } else {
                 alert('Something went wrong');
             }
@@ -198,6 +202,14 @@ export default function CreatePage({user}) {
                 setDesc('');
                 setDate(moment().format('yyyy-MM-DDTHH:mm').toString());
                 setLocation('');
+
+                //set address hooks back to original state
+                setAddress1('');
+                setAddress2('');
+                setCity('');
+                setAddState('');
+                setCountry('');
+                setPostal('');
                 
             } else {
                 alert('Something went wrong');
@@ -228,10 +240,39 @@ export default function CreatePage({user}) {
                     <h1>
                         Location
                     </h1> 
-                    <textarea placeholder="20 W 34th St, New York, NY, 10001" className="mb-2 pl-1"
-                    value={location}
-                    onChange={e=>setLocation(e.target.value)}/>
+                    <div className="flex flex-col">
+                        <AddressAutofill
+                        accessToken={String(environment.mapbox.accessToken)}>
+                            <input type='text' placeholder="address line 1" className="mb-2 pl-1 w-full"
+                            value={address1}
+                            onChange={e=>setAddress1(e.target.value)}/>
+                            
+                        </AddressAutofill>
+                        <input type='text' placeholder="address line 2" className="mb-2 pl-1"
+                        value={address2}
+                        autoComplete="address-line2"
+                        onChange={e=>setAddress2(e.target.value)}/>
 
+                        <input type='text' placeholder="city" className="mb-2 pl-1"
+                        value={city}
+                        autoComplete="address-level2"
+                        onChange={e=>setCity(e.target.value)}/>
+
+                        <input type='text' placeholder="state" className="mb-2 pl-1"
+                        value={addState}
+                        autoComplete="address-level1"
+                        onChange={e=>setAddState(e.target.value)}/>
+
+                        <input type='text' placeholder="country" className="mb-2 pl-1"
+                        value={country}
+                        autoComplete="country"
+                        onChange={e=>setCountry(e.target.value)}/>
+
+                        <input type='text' placeholder="post code" className="mb-2 pl-1"
+                        value={postal}
+                        autoComplete="postal-code"
+                        onChange={e=>setPostal(e.target.value)}/>               
+                    </div>
                     <h1>
                         Date
                     </h1>
@@ -295,7 +336,12 @@ export default function CreatePage({user}) {
         setEventName(events.name);
         setDate(events.date);
         setDesc(events.description);
-        setLocation(events.location);
+        setAddress1(events.address.addressLine1);
+        setAddress2(events.address.addressLine2);
+        setCity(events.address.city);
+        setAddState(events.address.state);
+        setCountry(events.address.country);
+        setPostal(events.address.postalCode);
         setContact(events.contact);
         setLink(events.link);
     }
@@ -337,9 +383,9 @@ export default function CreatePage({user}) {
                         Location
                     </h1>
                     <div className="flex flex-col">
-                        <AddressAutofill 
+                        <AddressAutofill
                         accessToken={String(environment.mapbox.accessToken)}>
-                            <input type='text' placeholder="address line 1" className="mb-2 pl-1"
+                            <input type='text' placeholder="address line 1" className="mb-2 pl-1 w-full"
                             value={address1}
                             onChange={e=>setAddress1(e.target.value)}/>
                             
@@ -367,8 +413,7 @@ export default function CreatePage({user}) {
                         <input type='text' placeholder="post code" className="mb-2 pl-1"
                         value={postal}
                         autoComplete="postal-code"
-                        onChange={e=>setPostal(e.target.value)}/>
-                        
+                        onChange={e=>setPostal(e.target.value)}/>               
                     </div>
                     <h1>
                         Date
@@ -473,7 +518,9 @@ export default function CreatePage({user}) {
                                             Location:
                                         </h2>
                                         <p className="font-semibold text-md">
-                                            {events.location}
+                                            {events.address.addressLine1}, {events.address.addressLine2} <br></br>
+                                            {events.address.city}, {events.address.state} <br></br>
+                                            {events.address.country} {events.address.postalCode}
                                         </p>
                                     </div>
 
@@ -552,7 +599,9 @@ export default function CreatePage({user}) {
                                             Location:
                                         </h2>
                                         <p className="font-semibold text-md">
-                                            {events.location}
+                                            {events.address.addressLine1}, {events.address.addressLine2} <br></br>
+                                            {events.address.city}, {events.address.state} <br></br>
+                                            {events.address.country} {events.address.postalCode}
                                         </p>
                                     </div>
 

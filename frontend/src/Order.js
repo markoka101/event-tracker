@@ -25,6 +25,7 @@ export function eventsArr (data,order,created) {
             arr.sort((a,b) => moment(a.date,'yyyy-MM-DDTHH:mm').diff(moment(b.date, 'yyyy-MM-DDTHH:mm')));
             break;
         default:
+            arr.sort((a,b) => a.id - b.id);
             break;
     }  
     return arr;

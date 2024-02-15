@@ -103,28 +103,30 @@ export default function Home({user}) {
 
     return (
         <section id='home'>
-            <div className="container w-[95%] h-5/6 mx-auto flex flex-row py-5 px-10 justify-center">
-                <div className="bg-stone-500 bg-opacity-30 py-6 w-3/5 border-amber-800 border-opacity-20 rounded-md border-4 h-full">
-                    <h1 className="text-4xl font-extrabold px-4">
-                        ALL EVENTS:
-                    </h1>
+            <div className="container w-[95%] h-5/6 mx-auto flex flex-row py-5">
+                <div className="bg-stone-500 flex flex-col bg-opacity-30 py-6 w-3/5 border-amber-800 border-opacity-20 rounded-md border-4 h-[87vh]">
+                    <div className="flex justify-between pr-8">
+                        <h1 className="text-4xl font-extrabold px-4">
+                            ALL EVENTS:
+                        </h1>
 
-                    <div className="items-center justify-start flex ml-3 mt-1 mb-2">
-                        <select
-                        className="px-1 ring-1 ring-black"
-                        value={allOrder}
-                        onChange={e=>allOrderSelect(e)}>
-                            <option hidden value={0}>Sort By</option>
-                            <option value={1}>name</option>
-                            <option value={2}>date</option>
-                        </select>
+                        <div className="items-end justify-start flex ml-3 mt-1 mb-2">
+                            <select
+                            className="px-1 ring-1 ring-black"
+                            value={allOrder}
+                            onChange={e=>allOrderSelect(e)}>
+                                <option value={0}>Recent</option>
+                                <option value={1}>name</option>
+                                <option value={2}>date</option>
+                            </select>
+                        </div>
                     </div>
-                    <div className="px-3 w-full h-[72vh] overflow-auto scrollbar">
+                    <div className="px-3 w-full h-full overflow-auto scrollbar">
                         {eventsArr(data,allOrder,false).map(events => {
                             return(
                                 <article key={events.id} className="bg-amber-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   
                                     <div className="mx-[-12px] border-black border-b-2 pb-3 mb-3">
-                                        <h1 className="px-3 font-bold text-2xl">
+                                        <h1 className="px-3 font-extrabold text-2xl">
                                             {events.name}
                                         </h1>
                                     </div>
@@ -182,22 +184,24 @@ export default function Home({user}) {
                     </div>
                 </div>
 
-                <div className="bg-amber-700 bg-opacity-15  py-6 ml-10 w-2/5 border-4 border-amber-900 border-opacity-15 rounded-md">
-                    <h1 className="text-4xl font-bold px-4">
-                        SAVED EVENTS:
-                    </h1>
+                <div className="bg-amber-700 bg-opacity-15 py-6 ml-10 w-2/5 border-4 border-amber-900 border-opacity-15 rounded-md h-[87vh] flex flex-col">
+                    <div className="flex justify-between pr-8">
+                        <h1 className="text-4xl font-bold px-4">
+                            SAVED EVENTS:
+                        </h1>
 
-                    <div className="items-center justify-start flex ml-3 mt-1 mb-2">
-                        <select
-                        className="px-1 ring-1 ring-black"
-                        value={savedOrder}
-                        onChange={e=>saveOrderSelect(e)}>
-                            <option hidden value={0}>Sort By</option>
-                            <option value={1}>name</option>
-                            <option value={2}>date</option>
-                        </select>
+                        <div className="items-end justify-start flex ml-3 mt-1 mb-2">
+                            <select
+                            className="px-1 ring-1 ring-black"
+                            value={savedOrder}
+                            onChange={e=>saveOrderSelect(e)}>
+                                <option value={0}>Recent</option>
+                                <option value={1}>name</option>
+                                <option value={2}>date</option>
+                            </select>
+                        </div>
                     </div>
-                    <div className="px-3 w-full h-[72vh] overflow-auto scrollbar">
+                    <div className="px-3 w-full h-full overflow-auto scrollbar">
                         {eventsArr(saveData,savedOrder,false).map(events => {
                             return(
                                 <article key={events.id} className="bg-amber-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   

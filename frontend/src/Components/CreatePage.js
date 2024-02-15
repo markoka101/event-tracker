@@ -459,31 +459,35 @@ export default function CreatePage({user}) {
         <section id="createPage">
             <div className="container flex flex-row w-[95%] h-5/6 mx-auto overflow-auto scrollbar py-5">
                 <div className="flex flex-col bg-stone-500 bg-opacity-30 py-6 w-3/5 border-amber-800 border-4 border-opacity-20 rounded-md h-[87vh] overflow-auto scrollbar">
-                    <div className="flex justify-between">
+                    <div className="flex justify-between pr-8">
                         <h1 className="text-4xl font-bold px-4"> 
                             CREATED EVENTS:
                         </h1>
-                        <button 
-                        className="p-2 font-bold bg-slate-100 ring-1 ring-gray-500 hover:ring-black hover:ring-2 mr-8"
-                        onClick={e=>clickCreate(e)}>
-                            Create
-                        </button>
-                    </div>
-                    {createOpen === true ? createForm() : null}
-                    <div>
+                        <div className="flex justify-between w-1/4 items-end">
+                            <div>
+                                <div className="items-center justify-start flex ml-3 mt-1 mb-2">
+                                    <select
+                                    className="px-1 ring-1 ring-black"
+                                    value={createdOrder}
+                                    onChange={e=>createOrderSelect(e)}>
+                                        <option value={0}>Recent</option>
+                                        <option value={1}>name</option>
+                                        <option value={2}>date</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button 
+                            className="py-2 px-4 font-bold bg-slate-100 ring-1 ring-gray-500 hover:ring-black hover:ring-2"
+                            onClick={e=>clickCreate(e)}>
+                                Create
+                            </button>
 
-                    <div className="items-center justify-start flex ml-3 mt-1 mb-2">
-                        <select
-                        className="px-1 ring-1 ring-black"
-                        value={createdOrder}
-                        onChange={e=>createOrderSelect(e)}>
-                            <option hidden value={0}>Sort By</option>
-                            <option value={1}>name</option>
-                            <option value={2}>date</option>
-                        </select>
-                    </div>
+                            
+                        </div>
+                        {createOpen === true ? createForm() : null}
+                    
 
-                </div>
+                    </div>
                     <div className="px-3 w-full h-full overflow-auto scrollbar">
                         {eventsArr(createdEvents,createdOrder,true).map(events => {
                             return  (
@@ -550,22 +554,23 @@ export default function CreatePage({user}) {
                         })}
                     </div>
                 </div>
-                <div className="bg-amber-700 bg-opacity-15 py-6 ml-10 w-2/5 border-4 border-amber-900 border-opacity-15 rounded-md">
-                    <h1 className="text-4xl font-bold px-4">
-                        SAVED EVENTS:
-                    </h1>
-                    <div className="mt-1 mb-2 ml-3 items-center justify-start flex">
-                        <select
-                        className="px-1 ring-1 ring-black"
-                        value={savedOrder}
-                        onChange={e=>saveOrderSelect(e)}>
-                            <option hidden value={0}>Sort By</option>
-                            <option value={1}>name</option>
-                            <option value={2}>date</option>
-                        </select>
-
+                <div className="bg-amber-700 bg-opacity-15 py-6 ml-10 w-2/5 border-4 border-amber-900 border-opacity-15 rounded-md flex flex-col h-[87vh]">
+                    <div className="flex justify-between pr-8">
+                        <h1 className="text-4xl font-bold px-4">
+                            SAVED EVENTS:
+                        </h1>
+                        <div className="mt-1 mb-2 ml-3 items-end justify-start flex">
+                            <select
+                            className="px-1 ring-1 ring-black"
+                            value={savedOrder}
+                            onChange={e=>saveOrderSelect(e)}>
+                                <option value={0}>Recent</option>
+                                <option value={1}>name</option>
+                                <option value={2}>date</option>
+                            </select>
+                        </div>
                     </div>
-                    <div className="px-3 w-full max-h-[70vh] overflow-auto scrollbar">
+                    <div className="px-3 w-full h-full overflow-auto scrollbar">
                         {eventsArr(savedEvents,savedOrder,false).map(events => {
                             return(
                                 <article key={events.id} className="bg-amber-50 bg-opacity-75 border-black border-2 rounded-md my-2 py-4 px-3 w-full">                                   

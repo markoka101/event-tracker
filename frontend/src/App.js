@@ -20,7 +20,7 @@ export default function App() {
     }
 
     return (
-        <main className='bg-amber-800 bg-opacity-10 w-screen h-screen'>
+        <main className='bg-amber-800 bg-opacity-10 min-w-screen min-h-screen overflow-auto overflow-x-clip overflow-y-auto'>
             <CookiesProvider>
                 {cookies.user ? (
                     <BrowserRouter>

@@ -1,4 +1,3 @@
-import moment from "moment";
 import React,{useEffect} from 'react';
 import { convertDate, formatDate, dayAndTime } from "../DateFunctions";
 import { eventsArr } from "../Order";
@@ -103,8 +102,8 @@ export default function Home({user}) {
 
     return (
         <section id='home'>
-            <div className="container w-[95%] h-5/6 mx-auto flex flex-row py-5">
-                <div className="bg-stone-500 flex flex-col bg-opacity-30 py-6 w-3/5 border-amber-800 border-opacity-20 rounded-md border-4 h-[87vh]">
+            <div className="container w-[95%] h-5/6 mx-auto flex flex-col md:flex-col lg:flex-row py-5">
+                <div className="bg-stone-500 flex flex-col bg-opacity-30 py-6 w-full lg:w-3/5 border-amber-800 border-opacity-20 rounded-md border-4 h-[87vh]">
                     <div className="flex justify-between pr-8">
                         <h1 className="text-4xl font-extrabold px-4">
                             ALL EVENTS:
@@ -184,7 +183,7 @@ export default function Home({user}) {
                     </div>
                 </div>
 
-                <div className="bg-amber-700 bg-opacity-15 py-6 ml-10 w-2/5 border-4 border-amber-900 border-opacity-15 rounded-md h-[87vh] flex flex-col">
+                <div className="bg-amber-700 bg-opacity-15 py-6 mt-10 lg:mt-0 lg:ml-10 w-full lg:w-2/5 border-4 border-amber-900 border-opacity-15 rounded-md h-[87vh] flex flex-col">
                     <div className="flex justify-between pr-8">
                         <h1 className="text-4xl font-bold px-4">
                             SAVED EVENTS:

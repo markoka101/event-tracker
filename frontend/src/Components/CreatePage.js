@@ -457,8 +457,8 @@ export default function CreatePage({user}) {
 
     return(
         <section id="createPage">
-            <div className="container flex flex-row w-[95%] h-5/6 mx-auto overflow-auto scrollbar py-5">
-                <div className="flex flex-col bg-stone-500 bg-opacity-30 py-6 w-3/5 border-amber-800 border-4 border-opacity-20 rounded-md h-[87vh] overflow-auto scrollbar">
+            <div className="container flex flex-col lg:flex-row w-[95%] h-5/6 mx-auto py-5">
+                <div className="flex flex-col bg-stone-500 bg-opacity-30 py-6 w-full lg:w-3/5 border-amber-800 border-4 border-opacity-20 rounded-md h-[87vh] overflow-auto scrollbar">
                     <div className="flex justify-between pr-8">
                         <h1 className="text-4xl font-bold px-4"> 
                             CREATED EVENTS:
@@ -484,10 +484,9 @@ export default function CreatePage({user}) {
 
                             
                         </div>
-                        {createOpen === true ? createForm() : null}
-                    
-
+                        
                     </div>
+                    {createOpen === true ? createForm() : null}
                     <div className="px-3 w-full h-full overflow-auto scrollbar">
                         {eventsArr(createdEvents,createdOrder,true).map(events => {
                             return  (
@@ -554,7 +553,7 @@ export default function CreatePage({user}) {
                         })}
                     </div>
                 </div>
-                <div className="bg-amber-700 bg-opacity-15 py-6 ml-10 w-2/5 border-4 border-amber-900 border-opacity-15 rounded-md flex flex-col h-[87vh]">
+                <div className="bg-amber-700 bg-opacity-15 py-6 mt-10 w-full lg:mt-0 lg:ml-10 lg:w-2/5 border-4 border-amber-900 border-opacity-15 rounded-md flex flex-col h-[87vh]">
                     <div className="flex justify-between pr-8">
                         <h1 className="text-4xl font-bold px-4">
                             SAVED EVENTS:
